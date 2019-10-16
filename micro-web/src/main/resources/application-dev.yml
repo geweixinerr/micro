@@ -1,0 +1,20 @@
+#basicserver:  port: 9091  servlet:    context-path: /micro#druidspring:  datasource:    username: geweixin    password: 198710
+    url: jdbc:log4jdbc:mysql://localhost:3306/yoga?useUnicode=true&characterEncoding=utf-8&useAffectedRows=true&useSSL=false&serverTimezone=Asia/Shanghai
+    driver-class-name: net.sf.log4jdbc.DriverSpy
+    type:  com.alibaba.druid.pool.DruidDataSource
+    name: micro
+    nitialSize: 66
+    asyncInit: true
+    maxActive: 64
+    minIdle: 6
+    maxWait: 60000
+    useUnfairLock: true
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 100
+    timeBetweenEvictionRunsMillis: 5000
+    minEvictableIdleTimeMillis: 600000
+    maxEvictableIdleTimeMillis: 900000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false    #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.dao.model  configuration:     map-underscore-to-camel-case: true 

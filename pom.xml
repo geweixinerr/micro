@@ -1,0 +1,273 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com</groupId>
+	<artifactId>micro</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Micro Component</name>
+	<url>http://maven.apache.org</url>
+	<description>基于SpringBoot的微服务多模块架构组件</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<spring.boot.version>2.1.9.RELEASE</spring.boot.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+		    <dependency>
+		       <groupId>com</groupId>
+		       <artifactId>micro-web</artifactId>
+		       <version>0.0.1-SNAPSHOT</version>
+		    </dependency>
+		    
+		    <dependency>
+		       <groupId>com</groupId>
+		       <artifactId>micro-service</artifactId>
+		       <version>0.0.1-SNAPSHOT</version>
+		    </dependency>
+		    
+		    <dependency>
+		       <groupId>com</groupId>
+		       <artifactId>micro-dao</artifactId>
+		       <version>0.0.1-SNAPSHOT</version>
+		    </dependency>
+		    
+		    <dependency>
+		       <groupId>com</groupId>
+		       <artifactId>micro-commons</artifactId>
+		       <version>0.0.1-SNAPSHOT</version>
+		    </dependency>
+		    
+		    <dependency>
+		       <groupId>com</groupId>
+		       <artifactId>micro-plugin</artifactId>
+		       <version>0.0.1-SNAPSHOT</version>
+		    </dependency>
+		    
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-data-jdbc</artifactId>
+			    <version>2.1.9.RELEASE</version>
+			</dependency>
+	
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+			    <version>2.1.9.RELEASE</version>
+			</dependency>
+        
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-quartz</artifactId>
+			    <version>2.1.9.RELEASE</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid-spring-boot-starter</artifactId>
+				<version>1.1.20</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>2.1.0</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<scope>test</scope>
+			</dependency>
+		
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>28.1-jre</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>transmittable-thread-local</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			
+			<!-- Shiro start -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>1.4.1</version>
+				<exclusions>
+				   <exclusion>
+				     <groupId>org.apache.shiro</groupId>
+				     <artifactId>shiro-lang</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-cache</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-crypto-hash</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-crypto-cipher</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-crypto-core</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-event</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-config-core</artifactId>
+				   </exclusion>
+				   <exclusion>
+				      <groupId>org.apache.shiro</groupId>
+				      <artifactId>shiro-config-ogdl</artifactId>
+				   </exclusion>
+				</exclusions>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+				<version>1.4.1</version>
+			    <exclusions>
+				  <exclusion>
+				     <groupId>org.apache.shiro</groupId>
+				     <artifactId>shiro-cache</artifactId>
+				  </exclusion>
+				</exclusions>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>1.4.1</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>1.4.1</version>
+			</dependency>
+			<!-- Shiro end -->
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>	
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.stephenc.eaio-uuid</groupId>
+			<artifactId>uuid</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<compilerArgument>-Xlint:unchecked</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+		
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+         
+		<finalName>micro_component</finalName>
+	</build>
+
+	<!-- profiles配置 -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>../deploy/vars/dev.properties</filter>
+				</filters>
+			</build>
+		</profile>
+
+		<profile>
+			<id>sit</id>
+			<build>
+				<filters>
+					<filter>../deploy/vars/sit.properties</filter>
+				</filters>
+			</build>
+		</profile>
+
+		<profile>
+			<id>pre</id>
+			<build>
+				<filters>
+					<filter>../deploy/vars/pre.properties</filter>
+				</filters>
+			</build>
+		</profile>
+
+		<profile>
+			<id>prd</id>
+			<build>
+				<filters>
+					<filter>../deploy/vars/prd.properties</filter>
+				</filters>
+			</build>
+		</profile>
+	</profiles>
+	
+	<modules>
+		<module>micro-web</module>
+		<module>micro-commons</module>
+		<module>micro-service</module>
+		<module>micro-dao</module>
+		<module>micro-plugin</module>
+	</modules>
+</project>
