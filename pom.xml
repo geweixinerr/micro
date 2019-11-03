@@ -40,6 +40,12 @@
 		    
 		    <dependency>
 		       <groupId>com</groupId>
+		       <artifactId>micro-data</artifactId>
+		       <version>0.0.1-SNAPSHOT</version>
+		    </dependency>
+		    
+		    <dependency>
+		       <groupId>com</groupId>
 		       <artifactId>micro-commons</artifactId>
 		       <version>0.0.1-SNAPSHOT</version>
 		    </dependency>
@@ -269,5 +275,6 @@
 		<module>micro-service</module>
 		<module>micro-dao</module>
 		<module>micro-plugin</module>
+		<module>micro-data</module>
 	</modules>
 </project>

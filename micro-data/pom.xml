@@ -7,25 +7,14 @@
 		<artifactId>micro</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>micro-service</artifactId>
-
-	<name>micro-service</name>
-	<description>核心服务组件</description>
+	<artifactId>micro-data</artifactId>
+	<name>micro-data</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>com</groupId>
-			<artifactId>micro-data</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>com</groupId>
-			<artifactId>micro-dao</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com</groupId>
-			<artifactId>micro-commons</artifactId>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.2</version>
 		</dependency>
 	</dependencies>
 </project>

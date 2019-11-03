@@ -1,4 +1,4 @@
-package micro.dao.model;
+package micro.data.dto;
 
 import java.io.Serializable;
 

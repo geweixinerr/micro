@@ -17,4 +17,4 @@
     validationQuery: 
     testWhileIdle: false
     testOnBorrow: false
-    testOnReturn: false  #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.dao.model  configuration:     map-underscore-to-camel-case: true 
+    testOnReturn: false  #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.data.dto  configuration:     map-underscore-to-camel-case: true 

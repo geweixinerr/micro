@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author gewx DAO层示例
  * **/
-import micro.dao.model.User;
+import micro.data.dto.User;
 
 public interface DemoDao {
 
