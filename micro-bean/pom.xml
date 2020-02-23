@@ -7,9 +7,11 @@
 		<artifactId>micro</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>micro-data</artifactId>
-	<name>micro-data</name>
-
+	<artifactId>micro-bean</artifactId>
+	<name>micro JavaBean</name>
+	<description>微服务数据模型定义组件:VO,PO</description>
+	
+	<!-- PO映射所需依赖 -->
 	<dependencies>
 		<dependency>
 			<groupId>org.mybatis</groupId>

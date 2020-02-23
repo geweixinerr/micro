@@ -1,9 +1,9 @@
-#basicserver:  port: 9091  servlet:    context-path: /micro#druidspring:  datasource:    username: geweixin    password: 198710
+#basicserver:  port: 9091  servlet:    context-path: /micro#druidspring:  datasource:    username: root    password: 198710
     url: jdbc:log4jdbc:mysql://localhost:3306/yoga?useUnicode=true&characterEncoding=utf-8&useAffectedRows=true&useSSL=false&serverTimezone=Asia/Shanghai
     driver-class-name: net.sf.log4jdbc.DriverSpy
     type:  com.alibaba.druid.pool.DruidDataSource
     name: micro
-    nitialSize: 66
+    initialSize: 6
     asyncInit: true
     maxActive: 64
     minIdle: 6
@@ -17,4 +17,4 @@
     validationQuery: SELECT 1
     testWhileIdle: true
     testOnBorrow: false
-    testOnReturn: false    #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.data.dto  configuration:     map-underscore-to-camel-case: true 
+    testOnReturn: false    #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.bean.po  configuration:     map-underscore-to-camel-case: true 

@@ -1,4 +1,4 @@
-package micro.data.dto;
+package micro.bean.po;
 
 import java.io.Serializable;
 

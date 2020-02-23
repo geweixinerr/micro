@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import micro.commons.log.MicroLogger;
 import micro.dao.intf.DemoDao;
-import micro.data.dto.User;
+import micro.bean.po.User;
 import micro.service.demo.DemoService;
 
 @Service

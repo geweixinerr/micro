@@ -36,7 +36,7 @@
 
 		<dependency>
 			<groupId>com</groupId>
-			<artifactId>micro-data</artifactId>
+			<artifactId>micro-bean</artifactId>
 		</dependency>
 		
 		<dependency>

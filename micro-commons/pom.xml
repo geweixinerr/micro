@@ -8,8 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>micro-commons</artifactId>
-
-
+	
 	<name>micro-commons</name>
 	<description>辅助工具组件</description>
 

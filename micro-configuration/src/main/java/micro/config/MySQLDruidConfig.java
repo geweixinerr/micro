@@ -1,4 +1,4 @@
-package micro.service.config;
+package micro.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
