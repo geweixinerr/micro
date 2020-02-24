@@ -1,15 +1,26 @@
 package micro.commons.task;
 
 /**
- * @author gewx 任务列表
+ * 任务Bean
+ * 
+ * @author gewx
  **/
-public abstract class TaskBean implements Runnable {
+public abstract class AbstractTaskBean implements Runnable {
 
-	private String taskId; // 任务Id
+	/**
+	 * 任务Id
+	 * **/
+	private String taskId;
 
-	private String taskName; // 任务名称
+	/**
+	 * 任务名称
+	 * **/
+	private String taskName;
 
-	private Runnable task; // 执行任务
+	/**
+	 * 执行任务
+	 * **/
+	private Runnable task;
 
 	public String getTaskId() {
 		return taskId;
@@ -34,5 +45,4 @@ public abstract class TaskBean implements Runnable {
 	public void setTask(Runnable task) {
 		this.task = task;
 	}
-
 }

@@ -7,11 +7,16 @@ import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
+/**
+ * Druid数据源配置类
+ * 
+ * @author gewx
+ * **/
 @Configuration
 public class DruidDataSourceConfig {
 
 	@Autowired
-	private MySQLDruidConfig druidConfig;
+	private MysqlDruidConfig druidConfig;
 
 	@ConfigurationProperties(prefix = "spring.datasource")
 	@Bean
@@ -24,7 +29,7 @@ public class DruidDataSourceConfig {
 	}
 
 	@Bean
-	public MySQLDruidConfig getDruidConfig() {
-		return new MySQLDruidConfig();
+	public MysqlDruidConfig getDruidConfig() {
+		return new MysqlDruidConfig();
 	}
 }

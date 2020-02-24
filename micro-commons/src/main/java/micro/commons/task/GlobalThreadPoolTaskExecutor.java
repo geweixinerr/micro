@@ -7,7 +7,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
- * @author gewx 全局任务异步处理
+ * 全局任务异步处理
+ * 
+ * @author gewx
  **/
 public final class GlobalThreadPoolTaskExecutor {
 
@@ -19,11 +21,16 @@ public final class GlobalThreadPoolTaskExecutor {
 	private static final ThreadPoolTaskExecutor POOLTASKEXECUTOR = new ThreadPoolTaskExecutor();
 
 	static {
-		POOLTASKEXECUTOR.setQueueCapacity(Integer.MAX_VALUE); // 队列深度.
-		POOLTASKEXECUTOR.setCorePoolSize(CORE_SIZE); // 核心线程数.
-		POOLTASKEXECUTOR.setMaxPoolSize(CORE_SIZE); // 最大线程数.
-		POOLTASKEXECUTOR.setThreadNamePrefix("YOGA_TASK_"); // 线程名前缀.
-		POOLTASKEXECUTOR.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy()); // discard
+		// 队列深度
+		POOLTASKEXECUTOR.setQueueCapacity(Integer.MAX_VALUE);
+		// 核心线程数
+		POOLTASKEXECUTOR.setCorePoolSize(CORE_SIZE);
+		// 最大线程数
+		POOLTASKEXECUTOR.setMaxPoolSize(CORE_SIZE);
+		// 线程名前缀
+		POOLTASKEXECUTOR.setThreadNamePrefix("ZJGW_TASK_");
+		// discard
+		POOLTASKEXECUTOR.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
 		POOLTASKEXECUTOR.initialize();
 
 		POOLTASKEXECUTOR.getThreadPoolExecutor().prestartAllCoreThreads();
@@ -35,11 +42,11 @@ public final class GlobalThreadPoolTaskExecutor {
 		return INSTANCE;
 	}
 
-	public void execute(TaskBean taskBean) {
+	public void execute(AbstractTaskBean taskBean) {
 		POOLTASKEXECUTOR.execute(taskBean);
 	}
 
-	public void execute(TaskBeanDelayed taskBean) {
+	public void execute(AbstractTaskBeanDelayed taskBean) {
 		POOLTASKEXECUTOR.execute(taskBean);
 	}
 

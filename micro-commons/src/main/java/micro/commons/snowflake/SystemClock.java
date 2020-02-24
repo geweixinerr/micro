@@ -16,8 +16,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public enum SystemClock {
 
-    // ====
-
     INSTANCE(1);
 
     private final long period;
@@ -75,5 +73,4 @@ public enum SystemClock {
             executorService.shutdown();
         }
     }
-
 }

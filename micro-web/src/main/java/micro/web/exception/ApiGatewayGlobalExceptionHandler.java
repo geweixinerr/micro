@@ -16,6 +16,9 @@ import micro.commons.log.MicroLogger;
 @RestController
 public final class ApiGatewayGlobalExceptionHandler {
 
+	/**
+	 * 日志组件
+	 * **/
 	private static final MicroLogger LOGGER = new MicroLogger(ApiGatewayGlobalExceptionHandler.class);
 
 	/**

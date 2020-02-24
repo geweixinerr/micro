@@ -6,7 +6,9 @@ import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.scheduling.concurrent.ScheduledExecutorTask;
 
 /**
- * @author gewx 全局延迟任务异步处理
+ * 全局延迟任务异步处理
+ * 
+ * @author gewx
  **/
 public final class GlobalDelayQueueTask {
 
@@ -14,14 +16,14 @@ public final class GlobalDelayQueueTask {
 	}
 
 	private static final int CORE_SIZE = Runtime.getRuntime().availableProcessors();
-	
+
 	private static final GlobalDelayQueueTask INSTANCE = new GlobalDelayQueueTask();
 
 	private static final GlobalThreadPoolTaskExecutor TASK_POOL = GlobalThreadPoolTaskExecutor.getInstance();
-	
-	private static final DelayQueue<TaskBeanDelayed> delayQueue = new DelayQueue<TaskBeanDelayed>();
 
-	private static final ScheduledExecutorFactoryBean factory = new ScheduledExecutorFactoryBean();
+	private static final DelayQueue<AbstractTaskBeanDelayed> DELAY_QUEUE = new DelayQueue<>();
+
+	private static final ScheduledExecutorFactoryBean FACTORY = new ScheduledExecutorFactoryBean();
 
 	static {
 		ScheduledExecutorTask task = new ScheduledExecutorTask();
@@ -31,39 +33,44 @@ public final class GlobalDelayQueueTask {
 		task.setRunnable(new Runnable() {
 			@Override
 			public void run() {
-				TaskBeanDelayed taskBean = null;
+				AbstractTaskBeanDelayed taskBean = null;
 				do {
-					taskBean = delayQueue.poll();
+					taskBean = DELAY_QUEUE.poll();
 					if (taskBean != null) {
 						TASK_POOL.execute(taskBean);
 					}
-				} while (taskBean != null);				
+				} while (taskBean != null);
 			}
 		});
 
-		factory.setScheduledExecutorTasks(task);
-		factory.setContinueScheduledExecutionAfterException(true); // 调度遇到异常后,调度计划继续执行.
-		factory.setThreadNamePrefix("YOGA_TASK_DELAY");
-		factory.setPoolSize(CORE_SIZE);
-		factory.initialize();
+		FACTORY.setScheduledExecutorTasks(task);
+		// 调度遇到异常后,调度计划继续执行
+		FACTORY.setContinueScheduledExecutionAfterException(true);
+		FACTORY.setThreadNamePrefix("YOGA_TASK_DELAY");
+		FACTORY.setPoolSize(CORE_SIZE);
+		FACTORY.initialize();
 	}
-	
+
 	/**
-	 * @author gewx 获取单例对象
-	 * **/
+	 * 获取单例对象
+	 * 
+	 * @author gewx
+	 **/
 	public static GlobalDelayQueueTask getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
-	 * @author gewx 覆盖任务执行
-	 * **/
-	public void compareAndSet(TaskBeanDelayed taskBean) {
-		if (delayQueue.contains(taskBean)) {
-			delayQueue.remove(taskBean);
-			delayQueue.add(taskBean);
+	 * 覆盖任务执行
+	 * 
+	 * @author gewx
+	 **/
+	public void compareAndSet(AbstractTaskBeanDelayed taskBean) {
+		if (DELAY_QUEUE.contains(taskBean)) {
+			DELAY_QUEUE.remove(taskBean);
+			DELAY_QUEUE.add(taskBean);
 		} else {
-			delayQueue.add(taskBean);
+			DELAY_QUEUE.add(taskBean);
 		}
 	}
 }

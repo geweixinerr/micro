@@ -9,10 +9,14 @@ import org.springframework.web.servlet.ModelAndView;
 import micro.commons.log.MicroLogger;
 import micro.service.demo.DemoService;
 
+/**
+ * 系统首页入口
+ * @author gewx
+ * **/
 @RestController
-public class AdminIndexController {
+public class IndexController {
 
-	private static final MicroLogger LOGGER = new MicroLogger(AdminIndexController.class);
+	private static final MicroLogger LOGGER = new MicroLogger(IndexController.class);
 	
 	@Autowired
 	private DemoService demoService;

@@ -4,10 +4,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author gewx MyBatis 自动扫描装配
+ * MyBatis 引导自动扫描装配
+ * @author gewx 
  * **/
 @Configuration
 @MapperScan(basePackages = { "micro.dao.intf" })
-public class MyBatisConfig {
+public class MybatisBootstrap {
 
 }

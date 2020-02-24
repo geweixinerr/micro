@@ -5,7 +5,9 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @author gewx Map工具类
+ * Map工具类
+ * 
+ * @author gewx 
  * **/
 public final class MapUtils {
 	

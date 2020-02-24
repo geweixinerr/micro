@@ -1,12 +1,14 @@
 package micro.commons.exception;
 
 /**
- * @author gewx 断言校验异常
+ * 断言校验异常
+ * 
+ * @author gewx
  **/
 public final class AssertException extends RuntimeException {
 
 	private static final long serialVersionUID = 1501409425705427239L;
-	
+
 	public AssertException() {
 		super();
 	}

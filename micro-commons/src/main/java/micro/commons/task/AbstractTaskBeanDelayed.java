@@ -4,17 +4,31 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author gewx 延迟任务队列
+ * 任务延迟任务队列
+ * 
+ * @author gewx
  **/
-public abstract class TaskBeanDelayed implements Delayed, Runnable {
+public abstract class AbstractTaskBeanDelayed implements Delayed, Runnable {
 
-	private String taskId; // 任务Id
+	/**
+	 * 任务Id
+	 **/
+	private String taskId;
 
-	private String taskName; // 任务名称
+	/**
+	 * 任务名称
+	 **/
+	private String taskName;
 
-	private Runnable task; // 任务
+	/**
+	 * 任务
+	 **/
+	private Runnable task;
 
-	private long expire; // 延迟时间
+	/**
+	 * 延迟时间
+	 **/
+	private long expire;
 
 	/**
 	 * 优先队列里面优先级规则 TimeUnit .MILLISECONDS 获取单位 为毫秒的时间戳
@@ -63,5 +77,4 @@ public abstract class TaskBeanDelayed implements Delayed, Runnable {
 	public void setExpire(long expire) {
 		this.expire = expire;
 	}
-
 }
