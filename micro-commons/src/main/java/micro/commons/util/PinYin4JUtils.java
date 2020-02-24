@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
+import micro.commons.annotation.ThreadSafe;
 import net.sourceforge.pinyin4j.PinyinHelper;
 
 /**
@@ -16,6 +17,7 @@ import net.sourceforge.pinyin4j.PinyinHelper;
  * 
  * @author gewx
  **/
+@ThreadSafe 
 public final class PinYin4JUtils {
 
 	public static final String SPLIT_SYMBOL = " / ";

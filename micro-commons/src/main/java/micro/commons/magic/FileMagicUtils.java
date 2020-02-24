@@ -8,11 +8,14 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * 文件魔数辅助类
  * 
  * @author gewx
  **/
+@ThreadSafe 
 public final class FileMagicUtils {
 
 	/**

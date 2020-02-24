@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * 分页辅助工具类
  * 
  * @author gewx
  **/
+@ThreadSafe 
 public final class PageHelp {
 
 	// 校验数值ZERO

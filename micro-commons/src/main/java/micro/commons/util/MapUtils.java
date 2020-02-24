@@ -4,11 +4,14 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * Map工具类
  * 
  * @author gewx 
  * **/
+@ThreadSafe 
 public final class MapUtils {
 	
 	/**

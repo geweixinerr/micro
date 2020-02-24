@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
 
 /**
@@ -15,6 +16,7 @@ import micro.commons.exception.ConcurrentException;
  * @author gewx
  **/
 @Component
+@ThreadSafe
 public final class ConcurrentOneByOne {
 
 	// 分布式锁VALUE

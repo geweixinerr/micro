@@ -5,6 +5,8 @@ import org.slf4j.MDC;
 
 import com.eaio.uuid.UUID;
 
+import micro.commons.annotation.ThreadSafe;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author gewx
  **/
+@ThreadSafe
 public final class MicroLogger {
 
 	enum LOGGER {

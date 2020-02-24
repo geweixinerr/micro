@@ -3,11 +3,14 @@ package micro.commons.security;
 import org.apache.commons.codec.binary.Base64;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * jasypt PBE基于口令加密
  * 
  * @author gewx
  **/
+@ThreadSafe 
 public final class JasyptUtils {
 
 	// salt 随机盐

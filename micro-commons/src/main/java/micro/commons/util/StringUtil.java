@@ -5,11 +5,14 @@ import java.io.StringWriter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * 字符串操作辅助类
  * 
  * @author gewx
  **/
+@ThreadSafe 
 public final class StringUtil {
 
 	/**
