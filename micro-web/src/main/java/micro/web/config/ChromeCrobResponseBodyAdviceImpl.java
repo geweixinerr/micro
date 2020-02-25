@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import micro.web.util.Response;
 
 /**
- * 解决Chrome Crob问题[Cross-Origin Read Blocking].
+ * 解决Chrome Crob问题[Cross-Origin Read Blocking]. JSONP的调用模式下会出现此种问题
  * 
  * @author gewx
  **/
