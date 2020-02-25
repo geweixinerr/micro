@@ -72,14 +72,9 @@ public class ShiroConfig {
 			@Qualifier(value = "securityManager") SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
-		shiroFilterFactoryBean.setLoginUrl("");
-		shiroFilterFactoryBean.setSuccessUrl("");
-		shiroFilterFactoryBean.setUnauthorizedUrl("");
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 		filterChainDefinitionMap.put("/druid/**", "anon");
 		filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
-		filterChainDefinitionMap.put("/api/logout", "logout");
-		filterChainDefinitionMap.put("/api/login", "anon");
 		filterChainDefinitionMap.put("/**", "jwt");
 
 		Map<String, Filter> filters = new LinkedHashMap<>();
