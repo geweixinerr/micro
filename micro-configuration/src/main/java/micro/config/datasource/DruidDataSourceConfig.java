@@ -1,4 +1,4 @@
-package micro.config;
+package micro.config.datasource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
