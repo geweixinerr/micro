@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 
+import micro.web.config.shiro.JwtToken;
+
 /**
  * shiro权限控制
  * 
  * @author gewx
  **/
-public class JwtFilter extends BasicHttpAuthenticationFilter {
+public final class JwtFilter extends BasicHttpAuthenticationFilter {
 
 	/**
 	 * Cros预检OPTIONS请求,常量标记
@@ -36,18 +38,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		return false;
 	}
-	
+
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
-		return false;
-	}
-
-	/**
-	 *
-	 */
-	@Override
-	protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-
+		JwtToken token = new JwtToken("geweixin", "token");
+		getSubject(request, response).login(token);
 		return true;
 	}
 
@@ -66,6 +61,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 		return super.preHandle(request, response);
 	}
 
+	/**
+	 * 对ajax请求进行判断过滤
+	 * 
+	 * @author gewx
+	 **/
 	@Override
 	protected void redirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
 		HttpServletResponse resp = (HttpServletResponse) response;

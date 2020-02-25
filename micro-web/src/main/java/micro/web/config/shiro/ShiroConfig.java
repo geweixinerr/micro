@@ -80,8 +80,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
 		filterChainDefinitionMap.put("/api/logout", "logout");
 		filterChainDefinitionMap.put("/api/login", "anon");
-		filterChainDefinitionMap.put("/api/**", "jwt");
-		filterChainDefinitionMap.put("/*", "authc");
+		filterChainDefinitionMap.put("/**", "jwt");
 
 		Map<String, Filter> filters = new LinkedHashMap<>();
 		filters.put("jwt", new JwtFilter());
