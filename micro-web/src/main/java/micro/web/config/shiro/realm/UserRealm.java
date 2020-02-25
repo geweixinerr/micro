@@ -38,8 +38,6 @@ public final class UserRealm extends AuthorizingRealm {
 	 **/
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		System.out.println("token----> " + token);
-
 		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(),
 				(String) token.getPrincipal());
 		return authcInfo;

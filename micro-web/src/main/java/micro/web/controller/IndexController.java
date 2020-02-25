@@ -38,6 +38,9 @@ public class IndexController {
 		ModelAndView view = new ModelAndView("/index");
 		LOGGER.exit(methodName, "首页访问请求[end]");
 		
+		if (true) {
+			throw new RuntimeException("Hello");
+		}
 		return view;
 	}
 	

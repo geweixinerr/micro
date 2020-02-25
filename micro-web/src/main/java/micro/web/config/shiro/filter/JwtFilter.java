@@ -1,16 +1,22 @@
 package micro.web.config.shiro.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 
+import com.alibaba.fastjson.JSONObject;
+
 import micro.web.config.shiro.JwtToken;
+import micro.web.util.Response;
+import micro.web.util.Response.GateWayCode;
 
 /**
  * shiro权限控制
@@ -18,6 +24,11 @@ import micro.web.config.shiro.JwtToken;
  * @author gewx
  **/
 public final class JwtFilter extends BasicHttpAuthenticationFilter {
+
+	/**
+	 * 认证token
+	 **/
+	private static final String AUTH_TOKEN = "token";
 
 	/**
 	 * Cros预检OPTIONS请求,常量标记
@@ -39,10 +50,32 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		return false;
 	}
 
+	/**
+	 * jwt 拦截具体动作
+	 * 
+	 * @author gewx
+	 **/
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
-		JwtToken token = new JwtToken("geweixin", "token");
-		getSubject(request, response).login(token);
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse resp = (HttpServletResponse) response;
+		
+		// 从请求头或者URL当中获取token
+		String token = ObjectUtils.defaultIfNull(req.getHeader(AUTH_TOKEN), req.getParameter(AUTH_TOKEN));
+		if (StringUtils.isBlank(token)) {
+			redirectToLogin(request, response);
+			return false;
+		}
+
+		JwtToken jwtToken = new JwtToken("geweixin", "token");
+		try {
+			getSubject(request, response).login(jwtToken);
+		} catch (Exception ex) {
+			String responseJson = JSONObject.toJSONString(Response.FAIL.newBuilder().out("权限不足~").toResult());
+			outFail(resp, responseJson);
+			return false;
+		}
+
 		return true;
 	}
 
@@ -54,40 +87,52 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	@Override
 	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
 		HttpServletRequest req = (HttpServletRequest) request;
-		// 跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
+		HttpServletResponse resp = (HttpServletResponse) response;
+
+		resp.setHeader("Access-control-Allow-Origin", req.getHeader("Origin"));
+		resp.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+		resp.setHeader("Access-Control-Allow-Headers", "*");
+		resp.setHeader("Access-Control-Expose-Headers", "*");
+
+		// Cros跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
 		if (req.getMethod().equals(HTTP_OPTIONS)) {
 			return false;
 		}
 		return super.preHandle(request, response);
 	}
 
-	/**
-	 * 对ajax请求进行判断过滤
-	 * 
-	 * @author gewx
-	 **/
 	@Override
 	protected void redirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
-		HttpServletResponse resp = (HttpServletResponse) response;
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse resp = (HttpServletResponse) response;
+
 		String ajaxHeader = req.getHeader(AJAX_REQUEST_HEADER);
-
 		if (AJAX_REQUEST_HEADER_VAL.equals(StringUtils.trimToEmpty(ajaxHeader))) {
-			response.setCharacterEncoding("utf-8");
-			response.setContentType("application/json;charset=utf-8");
-			resp.setDateHeader("expries", -1);
-			resp.setHeader("Cache-Control", "no-cache");
-			resp.setHeader("Pragma", "no-cache");
-
-			/*
-			 * JSONObject responseJson = new JSONObject(); Map<String, Object> val =
-			 * Response.FAIL.newBuilder().print("权限不足~").toResult();
-			 * responseJson.putAll(val); PrintWriter writer = response.getWriter();
-			 * writer.write(responseJson.toJSONString()); writer.flush(); writer.close();
-			 */
-			// TODO 抛出异常
+			String responseJson = JSONObject
+					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0001).toResult());
+			outFail(resp, responseJson);
 		} else {
 			super.redirectToLogin(request, response);
 		}
+	}
+
+	/**
+	 * 输出响应流
+	 * 
+	 * @author gewx
+	 * @param resp 响应对象, message 响应消息
+	 * @return void
+	 * @throws IOException
+	 **/
+	private void outFail(HttpServletResponse resp, String message) throws IOException {
+		resp.setCharacterEncoding("utf-8");
+		resp.setContentType("application/json;charset=utf-8");
+		resp.setDateHeader("expries", -1);
+		resp.setHeader("Cache-Control", "no-cache");
+		resp.setHeader("Pragma", "no-cache");
+		PrintWriter writer = resp.getWriter();
+		writer.write(message);
+		writer.flush();
+		writer.close();
 	}
 }
