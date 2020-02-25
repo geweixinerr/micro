@@ -240,9 +240,9 @@
 
 	<modules>
 		<module>micro-web</module>
-		<module>micro-service</module>
-		<module>micro-dao</module>
 		<module>micro-bean</module>
+		<module>micro-dao</module>
+		<module>micro-service</module>
 		<module>micro-configuration</module>
 		<module>micro-plugin</module>
 		<module>micro-commons</module>
