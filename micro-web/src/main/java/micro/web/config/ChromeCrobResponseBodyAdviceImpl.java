@@ -54,8 +54,6 @@ public class ChromeCrobResponseBodyAdviceImpl implements ResponseBodyAdvice<Obje
 				&& CONTEXT_SUB_TYPE.equals(selectedContentType.getSubtype())) {
 			// 设置自定义响应类型,绕过Crob检测
 			response.getHeaders().add("Content-Type", "application/json-x");
-			// 禁止浏览器嗅探响应类型
-			response.getHeaders().add("X-Content-Type-Options", "nosniff");
 		}
 
 		SimpleModule simpleModule = new SimpleModule();
