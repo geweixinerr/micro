@@ -24,53 +24,54 @@
 		<shiro.version>1.5.1</shiro.version>
 		<pinyin4j.version>2.5.1</pinyin4j.version>
 		<jasypt.version>1.9.3</jasypt.version>
+		<fastjson.version>1.2.62</fastjson.version>
 		<system.version>0.0.1-SNAPSHOT</system.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-web</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
-		    
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-service</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
-		    
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-dao</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
-		    
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-bean</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-web</artifactId>
+				<version>${system.version}</version>
+			</dependency>
 
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-configuration</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
-		    
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-commons</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
-		    
-		    <dependency>
-		       <groupId>com</groupId>
-		       <artifactId>micro-plugin</artifactId>
-		       <version>${system.version}</version>
-		    </dependency>
-		    
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-service</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-dao</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-bean</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-configuration</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-commons</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com</groupId>
+				<artifactId>micro-plugin</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
@@ -78,17 +79,17 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			
+
 			<dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-data-jdbc</artifactId>
-			    <version>${spring.boot.version}</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-jdbc</artifactId>
+				<version>${spring.boot.version}</version>
 			</dependency>
-	
+
 			<dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-data-redis</artifactId>
-			    <version>${spring.boot.version}</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-redis</artifactId>
+				<version>${spring.boot.version}</version>
 			</dependency>
 
 			<dependency>
@@ -96,21 +97,16 @@
 				<artifactId>druid-spring-boot-starter</artifactId>
 				<version>${druid.spring.version}</version>
 			</dependency>
-		
+
 			<dependency>
 				<groupId>org.mybatis.spring.boot</groupId>
 				<artifactId>mybatis-spring-boot-starter</artifactId>
 				<version>${mybatis.spring.boot.version}</version>
 			</dependency>
-		
-		    <!-- 
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<scope>test</scope>
-			</dependency>
-		     -->
-		
+
+			<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-test</artifactId> 
+				<scope>test</scope> </dependency> -->
+
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
@@ -118,29 +114,29 @@
 			</dependency>
 
 			<dependency>
-			    <groupId>com.alibaba</groupId>
-			    <artifactId>transmittable-thread-local</artifactId>
-			    <version>${transmittable.version}</version>
+				<groupId>com.alibaba</groupId>
+				<artifactId>transmittable-thread-local</artifactId>
+				<version>${transmittable.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
 				<artifactId>shiro-web</artifactId>
 				<version>${shiro.version}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
 				<artifactId>shiro-spring</artifactId>
 				<version>${shiro.version}</version>
 			</dependency>
-			
+
 			<dependency>
-			    <groupId>com.belerweb</groupId>
-			    <artifactId>pinyin4j</artifactId>
-			    <version>${pinyin4j.version}</version>
+				<groupId>com.belerweb</groupId>
+				<artifactId>pinyin4j</artifactId>
+				<version>${pinyin4j.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.jasypt</groupId>
 				<artifactId>jasypt</artifactId>
@@ -149,7 +145,7 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<dependencies>	
+	<dependencies>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -160,7 +156,13 @@
 			<artifactId>uuid</artifactId>
 			<version>${uuid.version}</version>
 		</dependency>
-		
+
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>${fastjson.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -182,7 +184,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		
+
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -235,7 +237,7 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 	<modules>
 		<module>micro-web</module>
 		<module>micro-service</module>

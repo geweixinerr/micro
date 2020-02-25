@@ -10,8 +10,10 @@ import java.util.Map;
  **/
 public enum Response {
 
+	// 响应成功
 	SUCCESS(true, "SUCCESS"),
 
+	// 响应失败
 	FAIL(false, "FAIL");
 
 	Response(boolean success, String msg) {
@@ -31,10 +33,21 @@ public enum Response {
 		return msg;
 	}
 
+	/**
+	 * 响应消息构建方法
+	 * 
+	 * @author gewx
+	 * @return 响应消息对象
+	 **/
 	public ResponseBuild newBuilder() {
 		return new ResponseBuild(this);
 	}
 
+	/**
+	 * 内部类,消息构建
+	 * 
+	 * @author gewx
+	 **/
 	public class ResponseBuild {
 		private final boolean success;
 
@@ -54,12 +67,24 @@ public enum Response {
 			return buildMap();
 		}
 
+		/**
+		 * 构建消息体
+		 * 
+		 * @author gewx
+		 * @return 消息体
+		 **/
 		public <T extends java.io.Serializable> Map<String, Object> toResult(T model) {
 			Map<String, Object> map = buildMap();
 			map.put("data", model);
 			return map;
 		}
 
+		/**
+		 * 构建消息体
+		 * 
+		 * @author gewx
+		 * @return 消息体
+		 **/
 		@SuppressWarnings("rawtypes")
 		public <T extends java.util.Collection> Map<String, Object> toResult(T model) {
 			Map<String, Object> map = buildMap();
@@ -67,6 +92,12 @@ public enum Response {
 			return map;
 		}
 
+		/**
+		 * 构建消息体
+		 * 
+		 * @author gewx
+		 * @return 消息体
+		 **/
 		@SuppressWarnings("rawtypes")
 		public <T extends java.util.Map> Map<String, Object> toResult(T model) {
 			Map<String, Object> map = buildMap();
@@ -74,6 +105,12 @@ public enum Response {
 			return map;
 		}
 
+		/**
+		 * 构建消息体
+		 * 
+		 * @author gewx
+		 * @return 消息体
+		 **/
 		private Map<String, Object> buildMap() {
 			Map<String, Object> map = new HashMap<>(6);
 			map.put("success", this.success);

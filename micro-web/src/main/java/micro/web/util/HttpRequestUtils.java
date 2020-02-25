@@ -10,7 +10,9 @@ import org.apache.commons.lang3.StringUtils;
  **/
 public final class HttpRequestUtils {
 
-	// 代理服务器请求头
+	/**
+	 * 代理服务器请求头
+	 * **/ 
 	private static final String PROXY_HEADER = "X-Forwarded-For";
 
 	private HttpRequestUtils() {
