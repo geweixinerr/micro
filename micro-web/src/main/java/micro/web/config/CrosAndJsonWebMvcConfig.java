@@ -1,4 +1,4 @@
-package micro.web.config.cros;
+package micro.web.config;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import lombok.Setter;
+import micro.web.config.cros.CrosMetadata;
 
 /**
  * Cros配置类, 此处Cros配置与JwtFilter一致[此处可不配置!!!]
@@ -30,7 +31,7 @@ import lombok.Setter;
  */
 @Configuration
 @Setter
-public class CrosWebMvcConfig extends WebMvcConfigurationSupport {
+public class CrosAndJsonWebMvcConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	@Qualifier(value = "crosMetadata")
