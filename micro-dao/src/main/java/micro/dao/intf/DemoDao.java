@@ -30,4 +30,6 @@ public interface DemoDao {
 	 * @return 受影响行数
 	 * **/
 	Integer updateById(User user);
+	
+	User getUserById(String userName);
 }

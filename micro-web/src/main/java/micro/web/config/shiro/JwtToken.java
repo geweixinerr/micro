@@ -5,6 +5,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import micro.bean.po.User;
 
 /**
  * JwtToken 数据对象
@@ -19,23 +20,27 @@ public final class JwtToken implements AuthenticationToken {
 	private static final long serialVersionUID = 2382305836675887108L;
 
 	/**
-	 * 用户名
+	 * 用户名,唯一
 	 **/
 	private final String userName;
 
 	/**
 	 * 认证Token
 	 **/
-	private final String token;
+	private String token;
 
-	public JwtToken(String userName, String token) {
+	/**
+	 * 登录用户信息
+	 **/
+	private User user;
+
+	public JwtToken(String userName) {
 		this.userName = userName;
-		this.token = token;
 	}
 
 	@Override
 	public Object getPrincipal() {
-		return userName;
+		return user;
 	}
 
 	@Override

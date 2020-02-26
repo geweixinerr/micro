@@ -1,5 +1,7 @@
 package micro.web.config.shiro.realm;
 
+import java.util.Optional;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -8,7 +10,10 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import micro.bean.po.User;
+import micro.service.demo.DemoService;
 import micro.web.config.shiro.JwtToken;
 
 /**
@@ -17,7 +22,10 @@ import micro.web.config.shiro.JwtToken;
  * @author gewx
  **/
 public final class UserRealm extends AuthorizingRealm {
-	
+
+	@Autowired
+	private DemoService demoService;
+
 	/**
 	 * 获取授权信息
 	 * 
@@ -27,7 +35,7 @@ public final class UserRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		// 为当前用户设置角色和权限
 		SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-		simpleAuthorInfo.addRole("admin");  		
+		simpleAuthorInfo.addRole("admin");
 		simpleAuthorInfo.addStringPermission("write");
 		System.out.println("权限控制---->");
 		return simpleAuthorInfo;
@@ -39,9 +47,20 @@ public final class UserRealm extends AuthorizingRealm {
 	 * @author gewx
 	 **/
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {		
-		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(),
-				(String) token.getPrincipal());
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+		JwtToken jwtToken = (JwtToken) token;
+		// 登录用户名
+		String userName = jwtToken.getUserName();
+
+		Optional<User> user = Optional.ofNullable(demoService.getUserById(userName));
+		if (!user.isPresent()) {
+			return null;
+		}
+
+		// 创建新token
+		
+		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user.get(), token.getCredentials(),
+				jwtToken.getUserName());
 		return authcInfo;
 	}
 

@@ -49,4 +49,9 @@ public class DemoServiceImpl implements DemoService {
 
         LOGGER.exit(methodName, "业务数据同步服务[end],result: " + list);
 	}
+	
+	@Override
+	public User getUserById(String userName) {
+		return demoDao.getUserById(userName);
+	}
 }

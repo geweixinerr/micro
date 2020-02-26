@@ -26,4 +26,10 @@
 				UPDATE `user` SET `user_name` = #{userName,jdbcType=VARCHAR} WHERE `id` = #{id,jdbcType=INTEGER}
          ]]>
 	</update>
+	
+	<select id="getUserById" parameterType="java.lang.String" resultType="userDemo">
+	     <![CDATA[
+	          SELECT `id`, `user_name` FROM `user` u WHERE u.`user_name` = #{user_name,jdbcType=VARCHAR}
+	     ]]>
+	</select>
 </mapper>
