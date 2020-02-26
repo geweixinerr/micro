@@ -3,7 +3,7 @@ package micro.commons.exception;
 /**
  * 并发异常
  * 
- * added by gewx 2019.8.9 
+ * @author gewx
  **/
 public final class ConcurrentException extends RuntimeException {
 

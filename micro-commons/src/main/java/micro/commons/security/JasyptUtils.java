@@ -13,8 +13,10 @@ import micro.commons.annotation.ThreadSafe;
 @ThreadSafe 
 public final class JasyptUtils {
 
-	// salt 随机盐
-	private static final String myEncryptionPassword = "123456";
+	/**
+	 * salt 随机盐
+	 * **/
+	private static final String SALT_PASSWORD = "123456";
 
 	private static final int CORE_SIZE = Runtime.getRuntime().availableProcessors();
 
@@ -23,7 +25,7 @@ public final class JasyptUtils {
 	// init
 	static {
 		ENCRYPTOR.setPoolSize(CORE_SIZE);
-		ENCRYPTOR.setPassword(myEncryptionPassword);
+		ENCRYPTOR.setPassword(SALT_PASSWORD);
 		ENCRYPTOR.setAlgorithm("PBEWithMD5AndTripleDES");
 	}
 

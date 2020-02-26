@@ -111,7 +111,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 				crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(",")));
 
 		// Cros跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
-		if (req.getMethod().equals(HTTP_OPTIONS)) {
+		if (HTTP_OPTIONS.equals(req.getMethod())) {
 			return false;
 		}
 		return super.preHandle(request, response);

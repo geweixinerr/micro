@@ -19,19 +19,29 @@ import micro.commons.exception.ConcurrentException;
 @ThreadSafe
 public final class ConcurrentOneByOne {
 
-	// 分布式锁VALUE
+	/**
+	 * 分布式锁VALUE 
+	 * **/
 	private static final String VALUE = "TRUE";
 
-	// 分布式锁默认超时时间,单位:秒
+	/**
+	 * 分布式锁默认超时时间,单位:秒
+	 * **/
 	private static final int DEFAULT_TIME_OUT = 15;
 
-	// 分布式锁Key容器
+	/**
+	 * 分布式锁Key容器
+	 * **/
 	private static final ThreadLocal<String> KEY = new ThreadLocal<>();
 
-	// 分布式锁超时数值容器
+	/**
+	 * 分布式锁超时数值容器
+	 * **/
 	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>();
 
-	// 分布式锁超时提示消息容器
+	/**
+	 * 分布式锁超时提示消息容器
+	 * **/
 	private static final ThreadLocal<String> TIPS = new ThreadLocal<>();
 
 	@Autowired

@@ -16,10 +16,14 @@ import micro.commons.annotation.ThreadSafe;
 @ThreadSafe 
 public final class PageHelp {
 
-	// 校验数值ZERO
+	/**
+	 * 校验数值ZERO
+	 * **/
 	private static final int ZERO = 0;
 
-	// 默认页码
+	/**
+	 * 默认页码
+	 * **/
 	private static final int DEFAULT_PAGENUM = 1;
 
 	/**

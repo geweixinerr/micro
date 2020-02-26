@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.alibaba.fastjson.JSONObject;
@@ -27,9 +26,10 @@ import micro.web.util.Response;
 /**
  * 解决Chrome Crob问题[Cross-Origin Read Blocking]. JSONP的调用模式下会出现此种问题
  * 
+ * 开放注解:@ControllerAdvice
+ * 
  * @author gewx
  **/
-//@ControllerAdvice
 public class ChromeCrobResponseBodyAdviceImpl implements ResponseBodyAdvice<Object> {
 
 	@SuppressWarnings("static-access")

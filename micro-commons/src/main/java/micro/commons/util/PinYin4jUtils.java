@@ -18,7 +18,7 @@ import net.sourceforge.pinyin4j.PinyinHelper;
  * @author gewx
  **/
 @ThreadSafe 
-public final class PinYin4JUtils {
+public final class PinYin4jUtils {
 
 	public static final String SPLIT_SYMBOL = " / ";
 
@@ -33,7 +33,7 @@ public final class PinYin4JUtils {
 	 * @param hyVal 中文
 	 * @return 拼音数值数组
 	 **/
-	public static String[] convertCNzhToPinYinArray(String hyVal) {
+	public static String[] convertCnzhToPinYinArray(String hyVal) {
 		if (StringUtils.isBlank(hyVal)) {
 			return Collections.emptyList().toArray(new String[] {});
 		}
@@ -60,8 +60,8 @@ public final class PinYin4JUtils {
 	 * @param zh 中文
 	 * @return 拼音数值
 	 **/
-	public static String convertCNzhToPinYinVal(String zh) {
-		String[] valArray = convertCNzhToPinYinArray(zh);
+	public static String convertCnzhToPinYinVal(String zh) {
+		String[] valArray = convertCnzhToPinYinArray(zh);
 		return Stream.of(valArray).map(val -> {
 			return Character.toString(val.charAt(0));
 		}).collect(Collectors.joining());
@@ -74,7 +74,7 @@ public final class PinYin4JUtils {
 	 * @return 包装后数据
 	 **/
 	public static String wrap(String zh, String splitSymbol) {
-		String pyVal = convertCNzhToPinYinVal(zh);
+		String pyVal = convertCnzhToPinYinVal(zh);
 		if (StringUtils.isNotBlank(pyVal)) {
 			StringBuilder sb = new StringBuilder(32);
 			sb.append(zh + splitSymbol + pyVal.toUpperCase());
