@@ -33,7 +33,7 @@ public class ShiroConfig {
 	@Autowired
 	@Qualifier(value = "crosMetadata")
 	private CrosMetadata crosMetadata;
-	
+
 	/**
 	 * 自定义Realm,权限校验
 	 * 
@@ -79,9 +79,13 @@ public class ShiroConfig {
 			@Qualifier(value = "securityManager") SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
-		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>(8);
+		// druid控制台,不过滤
 		filterChainDefinitionMap.put("/druid/**", "anon");
+		// 验证码,不过滤
 		filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
+		// 心跳检测,不过滤
+		filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/**", "jwt");
 
 		Map<String, Filter> filters = new LinkedHashMap<>();
@@ -112,8 +116,8 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
-	    DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-	    advisorAutoProxyCreator.setProxyTargetClass(true);
-	    return advisorAutoProxyCreator;
+		DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+		advisorAutoProxyCreator.setProxyTargetClass(true);
+		return advisorAutoProxyCreator;
 	}
 }

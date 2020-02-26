@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,41 +20,36 @@ import micro.web.util.Response;
 
 /**
  * 系统首页入口
+ * 
  * @author gewx
- * **/
+ **/
 @RestController
 public class IndexController {
 
 	private static final MicroLogger LOGGER = new MicroLogger(IndexController.class);
-	
+
 	@Autowired
 	private DemoService demoService;
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index() {
-		final String methodName = "index.html";
-		LOGGER.enter(methodName, "首页访问请求[start]", false);
-		
-		demoService.syncDataById(1024);
-		
 		ModelAndView view = new ModelAndView("/index");
-		LOGGER.exit(methodName, "首页访问请求[end]");
 		return view;
 	}
-	
+
 	@RequestMapping(value = "/cros", method = RequestMethod.GET)
-	@RequiresRoles({"admin"})
-	public Map<String,Object> cors(String userId, HttpServletRequest req, HttpServletResponse resp) {
+	@RequiresRoles({ "admin" })
+	@RequiresPermissions(value = { "write" })
+	public Map<String, Object> cors(String userId, HttpServletRequest req, HttpServletResponse resp) {
 		final String methodName = "cros";
-		LOGGER.enter(methodName, "cros客户端请求[start], params: " + userId, false);		
-		System.out.println(SecurityUtils.getSubject().isAuthenticated()); 
+		LOGGER.enter(methodName, "cros客户端请求[start], params: " + userId, false);
 		demoService.syncDataById(1024);
-		
+
 		LOGGER.exit(methodName, "cros客户端请求[end]");
-		
-		Map<String,Object> map = new HashMap<>();
+
+		Map<String, Object> map = new HashMap<>();
 		map.put("success", true);
 		return Response.SUCCESS.newBuilder().toResult();
 	}
-	
+
 }

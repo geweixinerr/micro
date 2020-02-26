@@ -1,4 +1,4 @@
-package micro.config.datasource;
+package micro.dao.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

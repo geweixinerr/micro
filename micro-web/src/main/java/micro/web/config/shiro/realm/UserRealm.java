@@ -8,6 +8,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+
 import micro.web.config.shiro.JwtToken;
 
 /**
@@ -26,7 +27,8 @@ public final class UserRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		// 为当前用户设置角色和权限
 		SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-		simpleAuthorInfo.addRole("admin");  
+		simpleAuthorInfo.addRole("admin");  		
+		simpleAuthorInfo.addStringPermission("write");
 		System.out.println("权限控制---->");
 		return simpleAuthorInfo;
 	}

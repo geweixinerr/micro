@@ -56,12 +56,6 @@
 
 			<dependency>
 				<groupId>com</groupId>
-				<artifactId>micro-configuration</artifactId>
-				<version>${system.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com</groupId>
 				<artifactId>micro-commons</artifactId>
 				<version>${system.version}</version>
 			</dependency>
@@ -243,7 +237,6 @@
 		<module>micro-bean</module>
 		<module>micro-dao</module>
 		<module>micro-service</module>
-		<module>micro-configuration</module>
 		<module>micro-plugin</module>
 		<module>micro-commons</module>
 	</modules>

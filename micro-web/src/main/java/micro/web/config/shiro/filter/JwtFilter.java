@@ -38,7 +38,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	private static final String HTTP_OPTIONS = "OPTIONS";
 
 	/**
-	 * ajax请求标记头
+	 * ajax请求标记头,跨域调用需要手工设置请求头
 	 **/
 	private static final String AJAX_REQUEST_HEADER = "X-Requested-With";
 
@@ -80,10 +80,10 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		JwtToken jwtToken = new JwtToken("geweixin", "token");
 		try {
 			getSubject(request, response).login(jwtToken);
-			
-			//create new token
-			
-			resp.setHeader(AUTH_TOKEN, "Java");  
+
+			// create new token
+
+			resp.setHeader(AUTH_TOKEN, "Java");
 		} catch (Exception ex) {
 			String responseJson = JSONObject
 					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult());
@@ -117,6 +117,11 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		return super.preHandle(request, response);
 	}
 
+	/**
+	 * 请求转发
+	 * 
+	 * @author gewx
+	 **/
 	@Override
 	protected void redirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
