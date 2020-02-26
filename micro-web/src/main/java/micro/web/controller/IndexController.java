@@ -6,8 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import micro.commons.log.MicroLogger;
 import micro.service.demo.DemoService;
-import micro.web.config.cros.CrosMetadata;
 import micro.web.util.Response;
 
 /**
@@ -30,10 +30,6 @@ public class IndexController {
 	@Autowired
 	private DemoService demoService;
 	
-	@Autowired
-	@Qualifier(value = "crosMetadata")
-	private CrosMetadata crosMetadata;
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index() {
 		final String methodName = "index.html";
@@ -47,19 +43,17 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/cros", method = RequestMethod.GET)
+	@RequiresRoles({"admin"})
 	public Map<String,Object> cors(String userId, HttpServletRequest req, HttpServletResponse resp) {
 		final String methodName = "cros";
-		LOGGER.enter(methodName, "cros客户端请求[start], params: " + userId, false);
-		System.out.println("crosMetadata——Test-------------> " + crosMetadata);
-		
+		LOGGER.enter(methodName, "cros客户端请求[start], params: " + userId, false);		
+		System.out.println(SecurityUtils.getSubject().isAuthenticated()); 
 		demoService.syncDataById(1024);
 		
 		LOGGER.exit(methodName, "cros客户端请求[end]");
 		
 		Map<String,Object> map = new HashMap<>();
 		map.put("success", true);
-		//return map;
-		resp.addHeader("token", "auth token");
 		return Response.SUCCESS.newBuilder().toResult();
 	}
 	

@@ -26,7 +26,8 @@ public final class UserRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		// 为当前用户设置角色和权限
 		SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-
+		simpleAuthorInfo.addRole("admin");  
+		System.out.println("权限控制---->");
 		return simpleAuthorInfo;
 	}
 

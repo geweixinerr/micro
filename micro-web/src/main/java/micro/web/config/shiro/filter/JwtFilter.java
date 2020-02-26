@@ -80,6 +80,10 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		JwtToken jwtToken = new JwtToken("geweixin", "token");
 		try {
 			getSubject(request, response).login(jwtToken);
+			
+			//create new token
+			
+			resp.setHeader(AUTH_TOKEN, "Java");  
 		} catch (Exception ex) {
 			String responseJson = JSONObject
 					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult());
