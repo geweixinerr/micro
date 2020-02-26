@@ -46,8 +46,7 @@ public class LoginController {
 			// 登录失败
 			return Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult();
 		}
-		
-		System.out.println(SecurityUtils.getSubject().getPrincipal());
+
 		LOGGER.exit(methodName, "cros客户端请求[end]");
 		return Response.SUCCESS.newBuilder().toResult();
 	}

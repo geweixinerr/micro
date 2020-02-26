@@ -13,7 +13,21 @@
 	<description>辅助工具组件</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>com</groupId>
+			<artifactId>micro-bean</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

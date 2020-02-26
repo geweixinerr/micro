@@ -47,20 +47,23 @@ public final class UserRealm extends AuthorizingRealm {
 	 * @author gewx
 	 **/
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		JwtToken jwtToken = (JwtToken) token;
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
 		// 登录用户名
-		String userName = jwtToken.getUserName();
+		String token = (String) authToken.getPrincipal();
 
-		Optional<User> user = Optional.ofNullable(demoService.getUserById(userName));
-		if (!user.isPresent()) {
+		/*
+		User user = demoService.getUserById(userName);
+		if (user == null) {
 			return null;
 		}
-
+		*/
 		// 创建新token
+		User user = new User();
+		user.setId("212");
+		user.setUserName("geweixin");
 		
-		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user.get(), token.getCredentials(),
-				jwtToken.getUserName());
+		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, token,
+				user.getUserName());
 		return authcInfo;
 	}
 

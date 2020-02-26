@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 
 import com.alibaba.fastjson.JSONObject;
@@ -77,13 +78,12 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 			return false;
 		}
 
-		JwtToken jwtToken = new JwtToken("geweixin", "token");
+		JwtToken jwtToken = new JwtToken("geweixin");
 		try {
-			getSubject(request, response).login(jwtToken);
-
-			// create new token
-
-			resp.setHeader(AUTH_TOKEN, "Java");
+			Subject subject = getSubject(request, response);
+			subject.login(jwtToken);
+			jwtToken = (JwtToken) subject.getPrincipal();
+			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
 		} catch (Exception ex) {
 			String responseJson = JSONObject
 					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult());
