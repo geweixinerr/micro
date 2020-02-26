@@ -8,7 +8,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-
 import micro.web.config.shiro.JwtToken;
 
 /**
@@ -17,7 +16,7 @@ import micro.web.config.shiro.JwtToken;
  * @author gewx
  **/
 public final class UserRealm extends AuthorizingRealm {
-
+	
 	/**
 	 * 获取授权信息
 	 * 
@@ -37,7 +36,7 @@ public final class UserRealm extends AuthorizingRealm {
 	 * @author gewx
 	 **/
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {		
 		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(),
 				(String) token.getPrincipal());
 		return authcInfo;

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import micro.commons.log.MicroLogger;
 import micro.service.demo.DemoService;
+import micro.web.config.cros.CrosMetadata;
 import micro.web.util.Response;
 
 /**
@@ -28,6 +30,10 @@ public class IndexController {
 	@Autowired
 	private DemoService demoService;
 	
+	@Autowired
+	@Qualifier(value = "crosMetadata")
+	private CrosMetadata crosMetadata;
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index() {
 		final String methodName = "index.html";
@@ -37,10 +43,6 @@ public class IndexController {
 		
 		ModelAndView view = new ModelAndView("/index");
 		LOGGER.exit(methodName, "首页访问请求[end]");
-		
-		if (true) {
-			throw new RuntimeException("Hello");
-		}
 		return view;
 	}
 	
@@ -48,6 +50,7 @@ public class IndexController {
 	public Map<String,Object> cors(String userId, HttpServletRequest req, HttpServletResponse resp) {
 		final String methodName = "cros";
 		LOGGER.enter(methodName, "cros客户端请求[start], params: " + userId, false);
+		System.out.println("crosMetadata——Test-------------> " + crosMetadata);
 		
 		demoService.syncDataById(1024);
 		

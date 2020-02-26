@@ -1,10 +1,11 @@
-package micro.web.config;
+package micro.web.config.cros;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -20,59 +21,20 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
+import lombok.Setter;
+
 /**
  * Cros配置类
  *
  * @author gewx
  */
 @Configuration
-@ConfigurationProperties(prefix = "cros.config")
+@Setter
 public class CrosWebMvcConfig extends WebMvcConfigurationSupport {
 
-	/**
-	 * Cros路径匹配模式
-	 **/
-	private String pathPattern;
-
-	/**
-	 * Cros支持调用方法类型
-	 **/
-	private String methods;
-
-	/**
-	 * Cros支持的访问域
-	 **/
-	private String origins;
-
-	/**
-	 * Cors支持的访问请求头
-	 **/
-	private String allowedHeaders;
-
-	/**
-	 * Cors支持的访问响应头
-	 **/
-	private List<String> exposedHeaders;
-
-	public void setPathPattern(String pathPattern) {
-		this.pathPattern = pathPattern;
-	}
-
-	public void setMethods(String methods) {
-		this.methods = methods;
-	}
-
-	public void setOrigins(String origins) {
-		this.origins = origins;
-	}
-
-	public void setAllowedHeaders(String allowedHeaders) {
-		this.allowedHeaders = allowedHeaders;
-	}
-
-	public void setExposedHeaders(List<String> exposedHeaders) {
-		this.exposedHeaders = exposedHeaders;
-	}
+	@Autowired
+	@Qualifier(value = "crosMetadata")
+	private CrosMetadata crosMetadata;
 
 	/**
 	 * 跨域Filter 配置的详细信息说明如下：addMapping：配置可以被跨域的路径，可以任意配置，可以具体到直接请求路径。
@@ -84,8 +46,9 @@ public class CrosWebMvcConfig extends WebMvcConfigurationSupport {
 	 **/
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping(pathPattern).allowedMethods(methods).allowedOrigins(origins).allowedHeaders(allowedHeaders)
-				.exposedHeaders(exposedHeaders.toArray(new String[] {}));
+		registry.addMapping(crosMetadata.getPathPattern()).allowedMethods(crosMetadata.getMethods())
+				.allowedOrigins(crosMetadata.getOrigins()).allowedHeaders(crosMetadata.getAllowedHeaders())
+				.exposedHeaders(crosMetadata.getExposedHeaders().toArray(new String[] {}));
 	}
 
 	/**
@@ -104,7 +67,7 @@ public class CrosWebMvcConfig extends WebMvcConfigurationSupport {
 	 * @author gewx
 	 **/
 	@Bean
-	MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
 		SimpleModule simpleModule = new SimpleModule();
 		simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
 

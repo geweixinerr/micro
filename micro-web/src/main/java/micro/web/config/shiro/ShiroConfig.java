@@ -12,10 +12,12 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import micro.web.config.cros.CrosMetadata;
 import micro.web.config.shiro.filter.JwtFilter;
 import micro.web.config.shiro.realm.UserRealm;
 
@@ -27,6 +29,10 @@ import micro.web.config.shiro.realm.UserRealm;
 @Configuration
 public class ShiroConfig {
 
+	@Autowired
+	@Qualifier(value = "crosMetadata")
+	private CrosMetadata crosMetadata;
+	
 	/**
 	 * 自定义Realm,权限校验
 	 * 
@@ -78,9 +84,8 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/**", "jwt");
 
 		Map<String, Filter> filters = new LinkedHashMap<>();
-		filters.put("jwt", new JwtFilter());
+		filters.put("jwt", new JwtFilter(crosMetadata));
 		shiroFilterFactoryBean.setFilters(filters);
-
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
 		return shiroFilterFactoryBean;

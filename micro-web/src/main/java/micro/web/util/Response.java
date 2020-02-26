@@ -102,7 +102,7 @@ public enum Response {
 		ResponseBuild(Response response) {
 			this.success = response.isSuccess();
 			this.msg = response.getMsg();
-			this.code = GateWayCode.S0000.getCode();
+			this.code = response.isSuccess() ? GateWayCode.S0000.getCode() : GateWayCode.E9999.getCode();
 		}
 
 		public ResponseBuild out(String msg) {

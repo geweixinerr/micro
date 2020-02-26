@@ -2,6 +2,7 @@ package micro.web.config.shiro.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,12 +15,13 @@ import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 
 import com.alibaba.fastjson.JSONObject;
 
+import micro.web.config.cros.CrosMetadata;
 import micro.web.config.shiro.JwtToken;
 import micro.web.util.Response;
 import micro.web.util.Response.GateWayCode;
 
 /**
- * shiro权限控制
+ * shiro + jwt权限控制
  * 
  * @author gewx
  **/
@@ -45,6 +47,12 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	 **/
 	private static final String AJAX_REQUEST_HEADER_VAL = "XMLHttpRequest";
 
+	private CrosMetadata crosMetadata;
+
+	public JwtFilter(CrosMetadata crosMetadata) {
+		this.crosMetadata = crosMetadata;
+	}
+
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		return false;
@@ -59,7 +67,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
-		
+
 		// 从请求头或者URL当中获取token
 		String token = ObjectUtils.defaultIfNull(req.getHeader(AUTH_TOKEN), req.getParameter(AUTH_TOKEN));
 		if (StringUtils.isBlank(token)) {
@@ -89,10 +97,10 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 
-		resp.setHeader("Access-control-Allow-Origin", req.getHeader("Origin"));
-		resp.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-		resp.setHeader("Access-Control-Allow-Headers", "*");
-		resp.setHeader("Access-Control-Expose-Headers", "*");
+		resp.setHeader("Access-control-Allow-Origin", crosMetadata.getOrigins());
+		resp.setHeader("Access-Control-Allow-Methods", crosMetadata.getMethods());
+		resp.setHeader("Access-Control-Allow-Headers", crosMetadata.getAllowedHeaders());
+		resp.setHeader("Access-Control-Expose-Headers", crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(",")));   
 
 		// Cros跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
 		if (req.getMethod().equals(HTTP_OPTIONS)) {
