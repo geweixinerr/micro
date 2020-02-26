@@ -8,9 +8,15 @@ import micro.commons.exception.AssertException;
 /**
  * 校验辅助类
  * 
- * @author gewx 
+ * @author gewx
  **/
 public abstract class Assert {
+
+	public static void neq(Number v1, Number v2, String msg) {
+		if (v1.intValue() == v2.intValue()) {
+			throw new AssertException(msg);
+		}
+	}
 
 	public static void eq(String v1, String v2, String msg) {
 		if (!v1.equals(v2)) {
@@ -19,7 +25,7 @@ public abstract class Assert {
 	}
 
 	public static void isNotBlank(String v1, String msg) {
-		if (!StringUtils.isNotBlank(v1)) {
+		if (StringUtils.isBlank(v1)) {
 			throw new AssertException(msg);
 		}
 	}
@@ -30,7 +36,7 @@ public abstract class Assert {
 		}
 	}
 
-	public static void isNull(Object v1, String msg) {
+	public static void isNotNull(Object v1, String msg) {
 		if (v1 == null) {
 			throw new AssertException(msg);
 		}

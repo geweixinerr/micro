@@ -1,9 +1,15 @@
 package micro.web.controller;
 
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import micro.bean.po.User;
+import micro.commons.util.ShiroUtils;
+import micro.web.util.Response;
 
 /**
  * 系统首页入口,心跳检测页
@@ -17,5 +23,13 @@ public class IndexController {
 	public ModelAndView index() {
 		ModelAndView view = new ModelAndView("/index");
 		return view;
+	}
+	
+	@RequestMapping(value = "/cros", method = RequestMethod.GET)
+	public Map<String, Object> login(String userId) {		
+		User user = ShiroUtils.getUser();
+		System.out.println("请求数据userId: " + userId + ", 用户对象: " + user);
+		
+		return Response.SUCCESS.newBuilder().toResult();
 	}
 }

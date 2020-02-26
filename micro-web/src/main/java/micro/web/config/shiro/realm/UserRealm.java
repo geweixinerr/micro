@@ -1,7 +1,5 @@
 package micro.web.config.shiro.realm;
 
-import java.util.Optional;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -13,6 +11,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import micro.bean.po.User;
+import micro.commons.jwt.Jwt;
+import micro.commons.util.JwtUtils;
 import micro.service.demo.DemoService;
 import micro.web.config.shiro.JwtToken;
 
@@ -48,22 +48,14 @@ public final class UserRealm extends AuthorizingRealm {
 	 **/
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
-		// 登录用户名
 		String token = (String) authToken.getPrincipal();
-
-		/*
-		User user = demoService.getUserById(userName);
+		Jwt.JwtBean bean = JwtUtils.parseToken(token);
+		User user = demoService.getUserById(bean.getUserName());
 		if (user == null) {
 			return null;
 		}
-		*/
-		// 创建新token
-		User user = new User();
-		user.setId("212");
-		user.setUserName("geweixin");
-		
-		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, token,
-				user.getUserName());
+
+		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, token, user.getUserName());
 		return authcInfo;
 	}
 

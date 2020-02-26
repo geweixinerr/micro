@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import micro.commons.jwt.Jwt;
 import micro.commons.log.MicroLogger;
 import micro.service.demo.DemoService;
 import micro.web.config.shiro.JwtToken;
@@ -40,7 +41,7 @@ public class LoginController {
 
 		// 模拟登录成功
 		try {
-			JwtToken token = new JwtToken(userName);
+			JwtToken token = new JwtToken(Jwt.create().setUserName(userName).setExpires(30).build().sign());
 			SecurityUtils.getSubject().login(token);
 		} catch (Exception ex) {
 			// 登录失败

@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 
 import com.alibaba.fastjson.JSONObject;
 
+import micro.commons.jwt.Jwt;
+import micro.commons.util.JwtUtils;
 import micro.web.config.cros.CrosMetadata;
 import micro.web.config.shiro.JwtToken;
 import micro.web.util.Response;
@@ -78,15 +79,24 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 			return false;
 		}
 
-		JwtToken jwtToken = new JwtToken("geweixin");
 		try {
-			Subject subject = getSubject(request, response);
-			subject.login(jwtToken);
-			jwtToken = (JwtToken) subject.getPrincipal();
-			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
+			boolean bool = JwtUtils.verifyToken(token);
+			if (!bool) {
+				String responseJson = JSONObject.toJSONString(
+						Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).out("登录超时~").toResult());
+				outFail(resp, responseJson);
+				return false;
+			}
+
+			// create new token
+			Jwt.JwtBean bean = JwtUtils.parseToken(token);
+			String newToken = Jwt.create().setUserName(bean.getUserName()).setExpires(30).build().sign();
+			JwtToken newJwtToken = new JwtToken(newToken);
+			getSubject(request, response).login(newJwtToken);
+			resp.setHeader(AUTH_TOKEN, newToken);
 		} catch (Exception ex) {
-			String responseJson = JSONObject
-					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult());
+			String responseJson = JSONObject.toJSONString(
+					Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("token 认证失败~").toResult());
 			outFail(resp, responseJson);
 			return false;
 		}
