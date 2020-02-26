@@ -71,7 +71,9 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		// 从请求头或者URL当中获取token
 		String token = ObjectUtils.defaultIfNull(req.getHeader(AUTH_TOKEN), req.getParameter(AUTH_TOKEN));
 		if (StringUtils.isBlank(token)) {
-			redirectToLogin(request, response);
+			String responseJson = JSONObject
+					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0001).toResult());
+			outFail(resp, responseJson);
 			return false;
 		}
 
@@ -79,7 +81,8 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		try {
 			getSubject(request, response).login(jwtToken);
 		} catch (Exception ex) {
-			String responseJson = JSONObject.toJSONString(Response.FAIL.newBuilder().out("权限不足~").toResult());
+			String responseJson = JSONObject
+					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult());
 			outFail(resp, responseJson);
 			return false;
 		}
@@ -100,7 +103,8 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		resp.setHeader("Access-control-Allow-Origin", crosMetadata.getOrigins());
 		resp.setHeader("Access-Control-Allow-Methods", crosMetadata.getMethods());
 		resp.setHeader("Access-Control-Allow-Headers", crosMetadata.getAllowedHeaders());
-		resp.setHeader("Access-Control-Expose-Headers", crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(",")));   
+		resp.setHeader("Access-Control-Expose-Headers",
+				crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(",")));
 
 		// Cros跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
 		if (req.getMethod().equals(HTTP_OPTIONS)) {

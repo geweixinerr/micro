@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Setter;
 
 /**
- * Cros配置类
+ * Cros配置类, 此处Cros配置与JwtFilter一致[此处可不配置!!!]
  *
  * @author gewx
  */
