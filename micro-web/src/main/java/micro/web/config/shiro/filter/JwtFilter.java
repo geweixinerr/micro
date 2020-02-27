@@ -90,17 +90,16 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 
 			// create new token
 			Jwt.JwtBean bean = JwtUtils.parseToken(token);
-			String newToken = Jwt.create().setUserName(bean.getUserName()).setExpires(30).build().sign();
-			JwtToken newJwtToken = new JwtToken(newToken);
-			getSubject(request, response).login(newJwtToken);
-			resp.setHeader(AUTH_TOKEN, newToken);
+			JwtToken jwtToken = new JwtToken(
+					Jwt.create().setUserName(bean.getUserName()).setExpires(30).build().sign());
+			getSubject(request, response).login(jwtToken);
+			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
 		} catch (Exception ex) {
 			String responseJson = JSONObject.toJSONString(
 					Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("token 认证失败~").toResult());
 			outFail(resp, responseJson);
 			return false;
 		}
-
 		return true;
 	}
 

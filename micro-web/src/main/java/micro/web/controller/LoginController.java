@@ -43,6 +43,7 @@ public class LoginController {
 		try {
 			JwtToken token = new JwtToken(Jwt.create().setUserName(userName).setExpires(30).build().sign());
 			SecurityUtils.getSubject().login(token);
+			resp.setHeader("token", token.getToken());
 		} catch (Exception ex) {
 			// 登录失败
 			return Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult();
