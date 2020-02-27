@@ -79,7 +79,8 @@ public final class Jwt {
 		public Jwt build() {
 			Assert.isNotBlank(userName, "userName is empty!");
 			Assert.neq(this.expires, 0, "expires is ZERO!");
-
+			Assert.gt(this.expires, 0, "expires lt is ZERO!");
+			
 			DateTime expiresDate = new DateTime().plusMinutes(expires);
 			JwtBean bean = new JwtBean();
 			bean.setUserName(userName);

@@ -1,5 +1,7 @@
 package micro.web.controller;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +26,15 @@ public class IndexController {
 		ModelAndView view = new ModelAndView("/index");
 		return view;
 	}
-	
+
 	@RequestMapping(value = "/cros", method = RequestMethod.GET)
-	public Map<String, Object> login(String userId) {		
+	public Map<String, Object> login(String userId) {
 		User user = ShiroUtils.getUser();
 		System.out.println("请求数据userId: " + userId + ", 用户对象: " + user);
-		
-		return Response.SUCCESS.newBuilder().toResult();
+
+		Map<String, Object> map = new HashMap<>(4);
+		map.put("val", BigDecimal.ZERO);
+
+		return Response.SUCCESS.newBuilder().toResult(map);
 	}
 }

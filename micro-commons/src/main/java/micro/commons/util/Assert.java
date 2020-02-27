@@ -12,6 +12,12 @@ import micro.commons.exception.AssertException;
  **/
 public abstract class Assert {
 
+	public static void gt(Number v1, Number v2, String msg) {
+		if (v1.intValue() < v2.intValue()) {
+			throw new AssertException(msg);
+		}
+	}
+	
 	public static void neq(Number v1, Number v2, String msg) {
 		if (v1.intValue() == v2.intValue()) {
 			throw new AssertException(msg);
