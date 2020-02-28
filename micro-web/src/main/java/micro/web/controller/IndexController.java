@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ public class IndexController {
 	}
 
 	@RequestMapping(value = "/cros", method = RequestMethod.GET)
+	@RequiresRoles(value = "admin")
 	public Map<String, Object> login(String userId) {
 		User user = ShiroUtils.getUser();
 		System.out.println("请求数据userId: " + userId + ", 用户对象: " + user);
