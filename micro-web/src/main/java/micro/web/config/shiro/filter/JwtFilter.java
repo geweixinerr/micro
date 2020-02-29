@@ -84,7 +84,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 				boolean bool = JwtUtils.verifyToken(token);
 				if (!bool) {
 					String responseJson = JSONObject.toJSONString(
-							Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).out("登录超时~").toResult());
+							Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).out("鉴权失败~").toResult());
 					outFail(resp, responseJson);
 					return false;
 				}
