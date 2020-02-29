@@ -80,20 +80,24 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		}
 
 		try {
-			boolean bool = JwtUtils.verifyToken(token);
-			if (!bool) {
-				String responseJson = JSONObject.toJSONString(
-						Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).out("登录超时~").toResult());
-				outFail(resp, responseJson);
-				return false;
+			try {
+				boolean bool = JwtUtils.verifyToken(token);
+				if (!bool) {
+					String responseJson = JSONObject.toJSONString(
+							Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).out("登录超时~").toResult());
+					outFail(resp, responseJson);
+					return false;
+				}
+			} finally {
+				/**
+				 * create new token 无论认证通过与否,token必须具备一次消费属性
+				 **/
+				Jwt.JwtBean bean = JwtUtils.parseToken(token);
+				JwtToken jwtToken = new JwtToken(
+						Jwt.create().setUserName(bean.getUserName()).setExpires(30).build().sign());
+				getSubject(request, response).login(jwtToken);
+				resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
 			}
-
-			// create new token
-			Jwt.JwtBean bean = JwtUtils.parseToken(token);
-			JwtToken jwtToken = new JwtToken(
-					Jwt.create().setUserName(bean.getUserName()).setExpires(30).build().sign());
-			getSubject(request, response).login(jwtToken);
-			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
 		} catch (Exception ex) {
 			String responseJson = JSONObject.toJSONString(
 					Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("token 认证失败~").toResult());
