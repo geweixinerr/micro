@@ -49,7 +49,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	 **/
 	private static final String AJAX_REQUEST_HEADER_VAL = "XMLHttpRequest";
 
-	private CrosMetadata crosMetadata;
+	private final CrosMetadata crosMetadata;
 
 	public JwtFilter(CrosMetadata crosMetadata) {
 		this.crosMetadata = crosMetadata;

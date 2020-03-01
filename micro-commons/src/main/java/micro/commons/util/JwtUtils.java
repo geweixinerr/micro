@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import com.alibaba.fastjson.JSONObject;
 
+import micro.commons.annotation.ThreadSafe;
 import micro.commons.jwt.Jwt;
 
 /**
@@ -11,6 +12,7 @@ import micro.commons.jwt.Jwt;
  * 
  * @author gewx
  **/
+@ThreadSafe
 public final class JwtUtils {
 
 	/**

@@ -5,9 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * @author gewx Http请求辅助类
  **/
+@ThreadSafe
 public final class HttpRequestUtils {
 
 	/**
