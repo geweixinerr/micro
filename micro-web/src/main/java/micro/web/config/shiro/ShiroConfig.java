@@ -88,6 +88,8 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/", "anon");
 		// 登录,不过滤
 		filterChainDefinitionMap.put("/api/login", "anon");
+		filterChainDefinitionMap.put("/eureka/**", "anon");
+
 		filterChainDefinitionMap.put("/**", "jwt");
 
 		Map<String, Filter> filters = new LinkedHashMap<>();

@@ -21,7 +21,7 @@ import micro.web.util.Response;
  **/
 @RestController
 public class IndexController {
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index() {
 		ModelAndView view = new ModelAndView("/index");

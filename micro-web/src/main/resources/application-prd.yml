@@ -17,4 +17,4 @@
     validationQuery: 
     testWhileIdle: false
     testOnBorrow: false
-    testOnReturn: false  #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.bean.po  configuration:     map-underscore-to-camel-case: true     #Croscros:  config:    pathPattern: /**    methods: '*'    origins: '*'    allowedHeaders: '*'    exposedHeaders:      - token      - content-disposition
+    testOnReturn: false    application:    name: eureka-client-micro-service    #mybatismybatis:  mapper-locations: classpath:mybatis/*sqlMap.xml  type-aliases-package: micro.bean.po  configuration:     map-underscore-to-camel-case: true     #Croscros:  config:    pathPattern: /**    methods: '*'    origins: '*'    allowedHeaders: '*'    exposedHeaders:      - token      - content-disposition      #eureka    eureka:  client:    serviceUrl:      defaultZone: http://localhost:9090/eureka/  instance:    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}    preferIpAddress: true
