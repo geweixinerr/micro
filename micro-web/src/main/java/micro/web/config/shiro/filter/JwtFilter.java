@@ -94,7 +94,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 				 **/
 				Jwt.JwtBean bean = JwtUtils.parseToken(token);
 				JwtToken jwtToken = new JwtToken(
-						Jwt.create().setUserName(bean.getUserName()).setExpires(30).build().sign());
+						Jwt.create().setUserName(bean.getUserName()).setExpires(bean.getExpires()).build().sign());
 				getSubject(request, response).login(jwtToken);
 				resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
 			}
