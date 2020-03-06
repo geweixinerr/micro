@@ -45,7 +45,7 @@ public final class Jwt {
 		/**
 		 * Token过期时间,单位:分
 		 **/
-		private int expires;
+		private short expires;
 
 		/**
 		 * 其他附属数据
@@ -61,7 +61,7 @@ public final class Jwt {
 			return this;
 		}
 
-		public JwtBuilder setExpires(int expires) {
+		public JwtBuilder setExpires(short expires) {
 			this.expires = expires;
 			return this;
 		}
@@ -106,7 +106,7 @@ public final class Jwt {
 		/**
 		 * Token过期时间,单位:分
 		 **/
-		private int expires;
+		private short expires;
 
 		/**
 		 * token失效日期

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,14 @@ public class LoginController {
 
 	private static final MicroLogger LOGGER = new MicroLogger(LoginController.class);
 
+	private static final String TOKEN = "token";
+
+	/**
+	 * token超时时间,单位/分钟
+	 **/
+	@Value("${token.expires}")
+	private short expires;
+
 	@Autowired
 	private DemoService demoService;
 
@@ -41,9 +50,9 @@ public class LoginController {
 
 		// 模拟登录成功
 		try {
-			JwtToken token = new JwtToken(Jwt.create().setUserName(userName).setExpires(30).build().sign());
+			JwtToken token = new JwtToken(Jwt.create().setUserName(userName).setExpires(expires).build().sign());
 			SecurityUtils.getSubject().login(token);
-			resp.setHeader("token", token.getToken());
+			resp.setHeader(TOKEN, token.getToken());
 		} catch (Exception ex) {
 			// 登录失败
 			return Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("登录失败~").toResult();

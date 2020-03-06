@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 /**
  * 服务组件引导类
  * 
- * @author gewx 2019.10.14 
+ * @author gewx 2019.10.14
  **/
 @SpringBootApplication
 @EnableFeignClients

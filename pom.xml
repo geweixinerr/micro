@@ -41,6 +41,12 @@
 
 			<dependency>
 				<groupId>com</groupId>
+				<artifactId>micro-manager</artifactId>
+				<version>${system.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com</groupId>
 				<artifactId>micro-service</artifactId>
 				<version>${system.version}</version>
 			</dependency>
@@ -260,7 +266,10 @@
 		<module>micro-bean</module>
 		<module>micro-dao</module>
 		<module>micro-service</module>
+		<module>micro-manager</module>
 		<module>micro-plugin</module>
 		<module>micro-commons</module>
+		<module>manager</module>
+		<module>micro-manager</module>
 	</modules>
 </project>
