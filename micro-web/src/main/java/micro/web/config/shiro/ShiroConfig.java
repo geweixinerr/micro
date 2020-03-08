@@ -57,9 +57,9 @@ public class ShiroConfig {
 		securityManager.setRealm(userRealm);
 		// 无状态应用服务器禁止session创建
 		DefaultSubjectDAO subjectDao = new DefaultSubjectDAO();
-		DefaultSessionStorageEvaluator webSubjectDao = (DefaultSessionStorageEvaluator) subjectDao
+		DefaultSessionStorageEvaluator sessionStorage = (DefaultSessionStorageEvaluator) subjectDao
 				.getSessionStorageEvaluator();
-		webSubjectDao.setSessionStorageEnabled(false);
+		sessionStorage.setSessionStorageEnabled(false);
 		securityManager.setSubjectDAO(subjectDao);
 		securityManager.setSubjectFactory(new StatelessDefaultSubjectFactory());
 		DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
