@@ -26,6 +26,7 @@
 		<jasypt.version>1.9.3</jasypt.version>
 		<fastjson.version>1.2.62</fastjson.version>
 		<minio.version>6.0.13</minio.version>
+		<commons.io.version>2.6</commons.io.version>
 		<spring.cloud.version>Hoxton.SR1</spring.cloud.version>
 		<netflix.eureka.client.version>2.2.1.RELEASE</netflix.eureka.client.version>
 		<feign.version>2.2.1.RELEASE</feign.version>
@@ -171,6 +172,12 @@
 				<groupId>io.minio</groupId>
 				<artifactId>minio</artifactId>
 				<version>${minio.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons.io.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
