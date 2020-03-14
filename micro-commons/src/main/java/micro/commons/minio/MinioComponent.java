@@ -19,12 +19,12 @@ public enum MinioComponent {
 	INSTANCE;
 
 	/**
-	 * 默认网络动作超时时间（读/写/连接）, 单位:秒
+	 * default network I/O timeout is 30 seconds
 	 **/
 	private static final long DEFAULT_TIMEOUT = 30;
 
 	/**
-	 * 延迟初始化Minio客户端Key
+	 * minioClient Key
 	 **/
 	private static final String MINIO_CLIENT_KEY = "default";
 
@@ -34,7 +34,7 @@ public enum MinioComponent {
 	private final Map<String, MinioClient> concurrentMap = new ConcurrentHashMap<>(4);
 
 	/**
-	 * lazy init MinioClient instance. MinioClient is ThreadSafe, support http1.1
+	 * lazy init MinioClient instance. minioClient is threadSafe, support http1.1
 	 * persistent connectionPool
 	 **/
 	@SuppressWarnings("unchecked")
@@ -48,6 +48,7 @@ public enum MinioComponent {
 				} catch (InvalidEndpointException | InvalidPortException e) {
 					throw new RuntimeException("Minio NetWork Connection wait...");
 				}
+				// mark star
 				concurrentMap.put(MINIO_CLIENT_KEY, client);
 			}
 			return client;
