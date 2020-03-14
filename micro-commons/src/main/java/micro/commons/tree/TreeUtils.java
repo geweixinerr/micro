@@ -20,14 +20,13 @@ public final class TreeUtils {
 	 * @param nodeList 数据节点集合
 	 * @return 解析完成后的树状结果
 	 **/
-	public static List<TreeNode> parse(List<TreeNode> nodeList) {
-		List<TreeNode> resultList = new ArrayList<>(64);
-		nodeList.stream().filter(val -> !hasChild(nodeList, val.getMenuId())).collect(Collectors.toList())
-				.forEach(val -> {
-					reverseRecursion(val, nodeList, resultList);
-				});
+	public static List<Node> parse(List<Node> nodeList) {
+		List<Node> resultList = new ArrayList<>(64);
+		nodeList.stream().filter(val -> !hasChild(nodeList, val.getId())).collect(Collectors.toList()).forEach(val -> {
+			reverseRecursion(val, nodeList, resultList);
+		});
 
-		Set<TreeNode> set = new HashSet<>(16);
+		Set<Node> set = new HashSet<>(16);
 		set.addAll(resultList);
 
 		resultList.clear();
@@ -48,7 +47,7 @@ public final class TreeUtils {
 	 * @param nodeList 数据节点集合
 	 * @return 解析完成后的树状结果
 	 **/
-	public static void getNodeJson(TreeNode node, List<TreeNode> nodeList) {
+	public static void getNodeJson(Node node, List<Node> nodeList) {
 		recursion(node, nodeList);
 	}
 
@@ -61,11 +60,11 @@ public final class TreeUtils {
 	 * @param resultList 根节点集合
 	 * @return void
 	 **/
-	private static void reverseRecursion(TreeNode node, List<TreeNode> nodeList, List<TreeNode> resultList) {
-		List<TreeNode> parentNodeList = nodeList.stream().filter(val -> val.getMenuId().equals(node.getParentId()))
+	private static void reverseRecursion(Node node, List<Node> nodeList, List<Node> resultList) {
+		List<Node> parentNodeList = nodeList.stream().filter(val -> val.getId().equals(node.getParentId()))
 				.collect(Collectors.toList());
 		if (parentNodeList.size() != 0) {
-			TreeNode parentNode = parentNodeList.get(0);
+			Node parentNode = parentNodeList.get(0);
 			reverseRecursion(parentNode, nodeList, resultList);
 		} else {
 			resultList.add(node);
@@ -80,8 +79,8 @@ public final class TreeUtils {
 	 * @param nodeList 数据节点集合
 	 * @return void
 	 **/
-	private static void recursion(TreeNode node, List<TreeNode> nodeList) {
-		List<TreeNode> childNodeList = nodeList.stream().filter(val -> val.getParentId().equals(node.getMenuId()))
+	private static void recursion(Node node, List<Node> nodeList) {
+		List<Node> childNodeList = nodeList.stream().filter(val -> val.getParentId().equals(node.getId()))
 				.sorted((o1, o2) -> o1.getSortNum().intValue() > o2.getSortNum() ? 1 : -1).collect(Collectors.toList());
 		if (childNodeList.size() != 0) {
 			node.setChildren(childNodeList);
@@ -100,7 +99,7 @@ public final class TreeUtils {
 	 * @param menuId 节点标记
 	 * @return boolean true 存在, false 不存在
 	 **/
-	private static boolean hasChild(List<TreeNode> node, String menuId) {
+	private static boolean hasChild(List<Node> node, String menuId) {
 		return node.stream().anyMatch(val -> val.getParentId().equals(menuId));
 	}
 }
