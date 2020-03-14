@@ -50,8 +50,6 @@ public enum MinioComponent {
 				}
 				concurrentMap.put(MINIO_CLIENT_KEY, client);
 			}
-			// 此处返回client,会将concurrentMap.put(MINIO_CLIENT_KEY, client)此动作复写一遍,
-			// 基于线程安全问题首先设置而后二度覆盖.
 			return client;
 		}
 	});
