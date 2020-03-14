@@ -163,7 +163,7 @@ public class MinioComponent {
 		try (final InputStream input = minioClient.getObject(bucketName, objectName)) {
 			byte[] byteArray = IOUtils.toByteArray(input);
 			return byteArray;
-		}		
+		}
 	}
 
 	/**
