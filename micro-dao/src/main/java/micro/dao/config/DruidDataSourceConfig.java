@@ -11,9 +11,14 @@ import com.alibaba.druid.pool.DruidDataSource;
  * Druid数据源配置类
  * 
  * @author gewx
- * **/
+ **/
 @Configuration
 public class DruidDataSourceConfig {
+
+	/**
+	 * 可用处理器数量
+	 **/
+	private static final int CPU_NUM = Runtime.getRuntime().availableProcessors();
 
 	@Autowired
 	private MysqlDruidConfig druidConfig;
@@ -22,9 +27,14 @@ public class DruidDataSourceConfig {
 	@Bean
 	public DruidDataSource druidDataSource() {
 		DruidDataSource dataSource = new DruidDataSource();
-		//druid bugs fix.
+		// druid bugs fix.
 		dataSource.setMinEvictableIdleTimeMillis(druidConfig.getMinEvictableIdleTimeMillis());
 		dataSource.setMaxEvictableIdleTimeMillis(druidConfig.getMaxEvictableIdleTimeMillis());
+
+		// performance optimizing
+		dataSource.setInitialSize(CPU_NUM + 1);
+		dataSource.setMinIdle(CPU_NUM + 1);
+		dataSource.setMaxActive(CPU_NUM * 2);
 		return dataSource;
 	}
 
