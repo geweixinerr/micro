@@ -283,7 +283,5 @@
 		<module>micro-manager</module>
 		<module>micro-plugin</module>
 		<module>micro-commons</module>
-		<module>manager</module>
-		<module>micro-manager</module>
 	</modules>
 </project>
