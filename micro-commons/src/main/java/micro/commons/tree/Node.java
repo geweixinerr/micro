@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,4 +45,25 @@ public class Node implements Serializable {
 	@Getter
 	@Setter
 	protected List<Node> children = new ArrayList<>();
+	
+	@Override
+	public final boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		Node otherObject = (Node) obj;
+		if (getClass() != otherObject.getClass()) {
+			return false;
+		}
+
+		EqualsBuilder builder = new EqualsBuilder();
+		builder.append(this.id, otherObject.id);
+		return builder.isEquals();
+	}
+	
+	@Override
+	public final int hashCode() {
+		return this.id.hashCode() * 31;
+	}
 }

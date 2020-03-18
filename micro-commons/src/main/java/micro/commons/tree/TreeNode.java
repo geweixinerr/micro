@@ -2,8 +2,6 @@ package micro.commons.tree;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -55,26 +53,5 @@ public final class TreeNode extends Node implements Serializable {
 		this.menuType = menuType;
 		this.menuCode = menuCode;
 		this.url = url;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-
-		TreeNode otherObject = (TreeNode) obj;
-		if (getClass() != otherObject.getClass()) {
-			return false;
-		}
-
-		EqualsBuilder builder = new EqualsBuilder();
-		builder.append(this.id, otherObject.id);
-		return builder.isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return this.id.hashCode() * 31;
 	}
 }
