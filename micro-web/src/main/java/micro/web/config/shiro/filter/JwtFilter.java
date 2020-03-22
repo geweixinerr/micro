@@ -16,7 +16,7 @@ import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import com.alibaba.fastjson.JSONObject;
 
 import micro.commons.jwt.Jwt;
-import micro.commons.util.JwtUtils;
+import micro.commons.jwt.JwtUtils;
 import micro.web.config.cros.CrosMetadata;
 import micro.web.config.shiro.JwtToken;
 import micro.web.util.Response;

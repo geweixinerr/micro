@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import micro.bean.po.User;
 import micro.commons.jwt.Jwt;
-import micro.commons.util.JwtUtils;
+import micro.commons.jwt.JwtUtils;
 import micro.service.demo.DemoService;
 import micro.web.config.shiro.JwtToken;
 
