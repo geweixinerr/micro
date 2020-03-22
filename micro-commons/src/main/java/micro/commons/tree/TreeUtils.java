@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import micro.commons.annotation.ThreadSafe;
+
 /**
  * 树形结构解析
  * 
  * @author gewx
  **/
+@ThreadSafe
 public final class TreeUtils {
 
 	/**

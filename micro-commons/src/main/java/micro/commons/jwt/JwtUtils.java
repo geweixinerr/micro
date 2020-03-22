@@ -1,4 +1,4 @@
-package micro.commons.util;
+package micro.commons.jwt;
 
 import org.joda.time.DateTime;
 
@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.jwt.Jwt;
+import micro.commons.util.JasyptUtils;
 
 /**
  * Jwt工具类
