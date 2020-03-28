@@ -5,21 +5,21 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import micro.plugin.eureka.EurekaInterface;
+import micro.plugin.eureka.EurekaPlugin;
 
 /**
  * Feign服务测试
  * 
  * @author gewx
- * **/
+ **/
 @Service
 public class FeignServiceImpl {
 
 	@Autowired
-	private EurekaInterface eureka;
-	
+	private EurekaPlugin eureka;
+
 	public void callFeign() {
-		Map<String,Object> result = eureka.hello("20200303", "35");
-		System.out.println("服务调用结果： " + result);
+		Map<String, Object> result = eureka.remoteCall("20200303", "35");
+		System.out.println("Feign远程调用结果： " + result);
 	}
 }
