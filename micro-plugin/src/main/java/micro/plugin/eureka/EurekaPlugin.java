@@ -15,5 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface EurekaPlugin {
 
 	@GetMapping("/index")
-	Map<String, Object> remoteCall(@RequestParam(name = "userId") String userId, @RequestParam(name = "age") String age);
+	Map<String, Object> remoteCall(@RequestParam(name = "userId") String userId,
+			@RequestParam(name = "age") String age);
+
+	@GetMapping("/org/dept/getDeptByUserId")
+	Map<String, Object> remoteCall(@RequestParam(name = "userId") String userId);
 }

@@ -1,16 +1,20 @@
 package micro.web.config;
 
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
+import feign.Logger;
+
+/**
+ * 自定义Bean配置
+ * 
+ * @author gewx
+ * **/
 @Configuration
 public class BeanConfiguration {
 
 	@Bean
-	@LoadBalanced
-	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
+	Logger.Level feignLoggerLevel() {
+		return Logger.Level.FULL;
 	}
 }
