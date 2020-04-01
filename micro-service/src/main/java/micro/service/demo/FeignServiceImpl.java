@@ -19,9 +19,6 @@ public class FeignServiceImpl {
 	private EurekaPlugin eureka;
 
 	public void callFeign() {
-		Map<String, Object> result = eureka.remoteCall("20200303", "35");
-		System.out.println("Feign远程调用结果： " + result);
-
 		Map<String, Object> _result = eureka.remoteCall("GEWEIXIN2020");
 		System.out.println("result---> " + _result);
 	}

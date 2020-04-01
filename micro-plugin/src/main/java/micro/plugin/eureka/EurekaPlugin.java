@@ -11,13 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 
  * @author gewx
  **/
-@FeignClient(value = "eureka-client-user-service")
+@FeignClient(value = "psys-master-service", path = "/psys-master")
 public interface EurekaPlugin {
 
-	@GetMapping("/index")
-	Map<String, Object> remoteCall(@RequestParam(name = "userId") String userId,
-			@RequestParam(name = "age") String age);
-
-	@GetMapping("/org/dept/getDeptByUserId")
+	@GetMapping("/api/organization/getDeptByUserId")
 	Map<String, Object> remoteCall(@RequestParam(name = "userId") String userId);
 }
