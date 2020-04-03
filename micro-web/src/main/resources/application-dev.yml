@@ -1,4 +1,4 @@
-#basicserver:  port: 9090  servlet:    context-path: /micro#druidspring:  datasource:    username: root    password: 198710
+#basicserver:  port: 9090  servlet:    context-path: /micro#druidspring:  datasource:    username: geweixin    password: 198710
     url: jdbc:log4jdbc:mysql://localhost:3306/yoga?useUnicode=true&characterEncoding=utf-8&useAffectedRows=true&useSSL=false&serverTimezone=Asia/Shanghai
     driver-class-name: net.sf.log4jdbc.DriverSpy
     type:  com.alibaba.druid.pool.DruidDataSource
