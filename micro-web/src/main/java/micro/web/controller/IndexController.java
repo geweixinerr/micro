@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +24,13 @@ import micro.web.util.Response;
 @RestController
 public class IndexController {
 	
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index() {
+		redisTemplate.opsForHash().put("geweiixn", "address", "江苏镇江");
+
 		ModelAndView view = new ModelAndView("/index");
 		return view;
 	}

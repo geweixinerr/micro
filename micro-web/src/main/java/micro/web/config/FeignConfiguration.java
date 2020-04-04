@@ -11,7 +11,7 @@ import feign.Logger;
  * @author gewx
  **/
 @Configuration
-public class BeanConfiguration {
+public class FeignConfiguration {
 
 	/**
 	 * Feign组件日志输出等级
