@@ -9,10 +9,15 @@ import feign.Logger;
  * 自定义Bean配置
  * 
  * @author gewx
- * **/
+ **/
 @Configuration
 public class BeanConfiguration {
 
+	/**
+	 * Feign组件日志输出等级
+	 * 
+	 * @author gewx
+	 **/
 	@Bean
 	Logger.Level feignLoggerLevel() {
 		return Logger.Level.FULL;
