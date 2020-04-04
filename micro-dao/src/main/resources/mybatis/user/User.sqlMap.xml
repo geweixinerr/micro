@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="micro.dao.intf.DemoDao">
+
+	<select id="listUser"
+		parameterType="java.util.Map" resultType="userDemo">
+         <![CDATA[
+                SELECT u.`id`,u.`user_name` FROM  `user` u WHERE u.`id` = #{id,jdbcType=INTEGER}
+         ]]>
+	</select>
+	
+	<insert id="save" parameterType="userDemo">
+         <![CDATA[
+                INSERT INTO `user` (`id`, `user_name`) 
+                       VALUES (
+                           #{id,jdbcType=INTEGER},
+                           #{userName,jdbcType=VARCHAR}
+                       )
+         ]]>
+	</insert>
+	
+	<update id="updateById" parameterType="userDemo">
+         <![CDATA[
+				UPDATE `user` SET `user_name` = #{userName,jdbcType=VARCHAR} WHERE `id` = #{id,jdbcType=INTEGER}
+         ]]>
+	</update>
+	
+	<select id="getUserById" parameterType="java.lang.String" resultType="userDemo">
+	     <![CDATA[
+	          SELECT `id`, `user_name` FROM `user` u WHERE u.`user_name` = #{user_name,jdbcType=VARCHAR}
+	     ]]>
+	</select>
+</mapper>

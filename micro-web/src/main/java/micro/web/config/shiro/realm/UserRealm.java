@@ -57,7 +57,7 @@ public final class UserRealm extends AuthorizingRealm {
 		if (user == null) {
 			return null;
 		}
-
+        System.out.println("获取用户名");
 		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, token, user.getUserName());
 		return authcInfo;
 	}

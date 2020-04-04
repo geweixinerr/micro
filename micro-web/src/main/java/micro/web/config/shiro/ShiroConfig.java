@@ -54,7 +54,6 @@ public class ShiroConfig {
 	public SecurityManager securityManager(@Qualifier(value = "userRealm") UserRealm userRealm) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(userRealm);
-		// 无状态应用服务器禁止session创建
 		DefaultSubjectDAO subjectDao = new DefaultSubjectDAO();
 		DefaultSessionStorageEvaluator sessionStorage = (DefaultSessionStorageEvaluator) subjectDao
 				.getSessionStorageEvaluator();
@@ -79,8 +78,6 @@ public class ShiroConfig {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>(8);
-		// druid控制台,不过滤
-		filterChainDefinitionMap.put("/druid/**", "anon");
 		// 验证码,不过滤
 		filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
 		// 心跳检测,不过滤
