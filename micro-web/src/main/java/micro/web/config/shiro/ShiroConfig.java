@@ -80,7 +80,7 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>(8);
 		// druid控制台,不过滤
-		filterChainDefinitionMap.put("/druid/**", "anon");
+		filterChainDefinitionMap.put("/monitor/druid/**", "anon");
 		// 验证码,不过滤
 		filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
 		// 心跳检测,不过滤
