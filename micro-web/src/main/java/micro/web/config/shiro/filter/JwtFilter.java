@@ -70,7 +70,6 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 
-		// 从请求头或者URL当中获取token
 		String token = ObjectUtils.defaultIfNull(req.getHeader(AUTH_TOKEN), req.getParameter(AUTH_TOKEN));
 		if (StringUtils.isBlank(token)) {
 			String responseJson = JSONObject
@@ -80,27 +79,33 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		}
 
 		try {
-			try {
-				boolean bool = JwtUtils.verifyToken(token);
-				if (!bool) {
-					String responseJson = JSONObject.toJSONString(
-							Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).out("鉴权失败~").toResult());
-					outFail(resp, responseJson);
-					return false;
-				}
-			} finally {
-				/**
-				 * create new token 无论认证通过与否,token必须具备一次消费属性
-				 **/
-				Jwt.JwtBean bean = JwtUtils.parseToken(token);
-				JwtToken jwtToken = new JwtToken(
-						Jwt.create().setUserName(bean.getUserName()).setExpires(bean.getExpires()).build().sign());
-				getSubject(request, response).login(jwtToken);
-				resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
+			// 本地鉴权
+			Jwt.JwtBean bean = JwtUtils.parseToken(token);
+			boolean bool = JwtUtils.verifyToken(bean);
+			if (!bool) {
+				String responseJson = JSONObject
+						.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0002).toResult());
+				outFail(resp, responseJson);
+				return false;
 			}
+
+			// 远程鉴权
+			boolean remotebool = JwtUtils.remoteVerifyToken(token);
+			if (!remotebool) {
+				String responseJson = JSONObject
+						.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0003).toResult());
+				outFail(resp, responseJson);
+				return false;
+			}
+
+			// create new token 
+			JwtToken jwtToken = new JwtToken(
+					Jwt.create().setUserName(bean.getUserName()).setExpires(bean.getExpires()).build().sign());
+			getSubject(request, response).login(jwtToken);
+			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
 		} catch (Exception ex) {
-			String responseJson = JSONObject.toJSONString(
-					Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("token 认证失败~").toResult());
+			String responseJson = JSONObject
+					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("鉴权失败!").toResult());
 			outFail(resp, responseJson);
 			return false;
 		}

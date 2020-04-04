@@ -45,23 +45,27 @@ public class Node implements Serializable {
 	@Getter
 	@Setter
 	protected List<Node> children = new ArrayList<>();
-	
+
 	@Override
-	public final boolean equals(Object obj) {
-		if (obj == null) {
+	public final boolean equals(Object otherObject) {
+		if (otherObject == null) {
 			return false;
 		}
 
-		Node otherObject = (Node) obj;
-		if (getClass() != otherObject.getClass()) {
+		if (this == otherObject) {
+			return true;
+		}
+
+		Node otherNode = (Node) otherObject;
+		if (getClass() != otherNode.getClass()) {
 			return false;
 		}
 
 		EqualsBuilder builder = new EqualsBuilder();
-		builder.append(this.id, otherObject.id);
+		builder.append(this.id, otherNode.id);
 		return builder.isEquals();
 	}
-	
+
 	@Override
 	public final int hashCode() {
 		return this.id.hashCode() * 31;
