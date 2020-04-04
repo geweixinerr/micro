@@ -35,10 +35,15 @@ public enum Response {
 		E0001("0001", "未登录"),
 
 		/**
-		 * 登录已超时
+		 * 登录超时
 		 **/
-		E0002("0002", "超时"),
+		E0002("0002", "登录超时"),
 
+		/**
+		 * 远程鉴权失败
+		 **/
+		E0003("0003", "非法请求"),
+		
 		/**
 		 * 权限不足
 		 **/
@@ -112,6 +117,7 @@ public enum Response {
 
 		public ResponseBuild addGateWayCode(GateWayCode geteWayCode) {
 			this.code = geteWayCode.getCode();
+			this.msg = geteWayCode.getComment();
 			return this;
 		}
 
