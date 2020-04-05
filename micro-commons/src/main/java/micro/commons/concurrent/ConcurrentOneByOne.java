@@ -100,16 +100,16 @@ public final class ConcurrentOneByOne {
 	private void before() {
 		String key = KEY.get();
 		if (StringUtils.isBlank(key)) {
-			throw new ConcurrentException("Concurrent Key is Empty~");
+			throw new ConcurrentException("concurrent Key is Empty~");
 		}
 
-		boolean isSet = redisTemplate.opsForValue().setIfAbsent(key, VALUE, TIME_OUT.get(), TimeUnit.SECONDS);
-		if (!isSet) {
+		boolean setNx = redisTemplate.opsForValue().setIfAbsent(key, VALUE, TIME_OUT.get(), TimeUnit.SECONDS);
+		if (!setNx) {
 			String tips = TIPS.get();
 			if (StringUtils.isNotBlank(tips)) {
 				throw new ConcurrentException(tips);
 			} else {
-				throw new ConcurrentException("Concurrent Mode Fail~");
+				throw new ConcurrentException("concurrent Mode Fail~");
 			}
 		}
 	}
