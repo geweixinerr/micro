@@ -2,7 +2,6 @@ package micro.commons.jwt;
 
 import java.util.concurrent.TimeUnit;
 
-import org.joda.time.DateTime;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.alibaba.fastjson.JSONObject;
@@ -40,12 +39,10 @@ public final class JwtUtils {
 	 **/
 	public static boolean verifyToken(String token) {
 		Jwt.JwtBean bean = parseToken(token);
-		DateTime thisDate = new DateTime();
-		DateTime tokenExpiresDate = new DateTime(bean.getExpiresDate());
-		if (thisDate.isAfter(tokenExpiresDate)) {
-			return false;
-		} else {
+		if (bean.getExpiresDate() > System.currentTimeMillis()) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -57,12 +54,10 @@ public final class JwtUtils {
 	 * @return true 验证通过, false 验证不通过,token已过期
 	 **/
 	public static boolean verifyToken(Jwt.JwtBean bean) {
-		DateTime thisDate = new DateTime();
-		DateTime tokenExpiresDate = new DateTime(bean.getExpiresDate());
-		if (thisDate.isAfter(tokenExpiresDate)) {
-			return false;
-		} else {
+		if (bean.getExpiresDate() > System.currentTimeMillis()) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -76,6 +71,7 @@ public final class JwtUtils {
 	public static boolean remoteVerifyToken(String token) {
 		Jwt.JwtBean bean = parseToken(token);
 		RedisTemplate<String, String> redisTemplate = SpringUtils.getBean("redisTemplate");
-		return redisTemplate.opsForValue().setIfAbsent(token, token, bean.getExpires() + 2, TimeUnit.MINUTES);
+		return redisTemplate.opsForValue().setIfAbsent(token, "true",
+				(bean.getExpiresDate() - System.currentTimeMillis()) / 1000 + 60, TimeUnit.SECONDS);
 	}
 }
