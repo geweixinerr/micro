@@ -25,7 +25,7 @@ import lombok.Setter;
 import micro.web.config.cros.CrosMetadata;
 
 /**
- * Cros配置类, 此处Cros配置与JwtFilter一致[此处可不配置!!!]
+ * CROS配置类与JwtFilter配合完成全站CROS配置
  *
  * @author gewx
  */
