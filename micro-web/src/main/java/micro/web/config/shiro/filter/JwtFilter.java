@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -33,11 +35,6 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	 * 认证token
 	 **/
 	private static final String AUTH_TOKEN = "token";
-
-	/**
-	 * Cros预检OPTIONS请求,常量标记
-	 **/
-	private static final String HTTP_OPTIONS = "OPTIONS";
 
 	/**
 	 * ajax请求标记头,跨域调用需要手工设置请求头
@@ -81,6 +78,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		try {
 			// 本地鉴权
 			Jwt.JwtBean bean = JwtUtils.parseToken(token);
+
 			boolean bool = JwtUtils.verifyToken(bean);
 			if (!bool) {
 				String responseJson = JSONObject
@@ -89,16 +87,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 				return false;
 			}
 
-			// 远程鉴权
-			boolean remotebool = JwtUtils.remoteVerifyToken(token);
-			if (!remotebool) {
-				String responseJson = JSONObject
-						.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0003).toResult());
-				outFail(resp, responseJson);
-				return false;
-			}
-
-			// create new token 
+			// create new token
 			JwtToken jwtToken = new JwtToken(
 					Jwt.create().setUserName(bean.getUserName()).setExpires(bean.getExpires()).build().sign());
 			getSubject(request, response).login(jwtToken);
@@ -123,16 +112,21 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 
 		resp.setHeader("Access-control-Allow-Origin", crosMetadata.getOrigins());
-		resp.setHeader("Access-Control-Allow-Methods", crosMetadata.getMethods());
-		resp.setHeader("Access-Control-Allow-Headers", crosMetadata.getAllowedHeaders());
+		resp.setHeader("Access-Control-Allow-Methods",
+				crosMetadata.getAllowMethods().stream().collect(Collectors.joining(", ")));
+		resp.setHeader("Access-Control-Allow-Headers",
+				crosMetadata.getAllowHeaders().stream().collect(Collectors.joining(", ")));
 		resp.setHeader("Access-Control-Expose-Headers",
-				crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(",")));
+				crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(", ")));
+		resp.setHeader("Access-Control-Allow-Credentials", String.valueOf(crosMetadata.isAllowCredentials()));
+		resp.setHeader("Access-Control-Max-Age", String.valueOf(crosMetadata.getMaxAge()));
 
-		// Cros跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
-		if (HTTP_OPTIONS.equals(req.getMethod())) {
+		if (req.getMethod().equals(HttpMethod.OPTIONS.toString())) {
+			resp.setStatus(HttpStatus.OK.value());
 			return false;
 		}
-		return super.preHandle(request, response);
+
+		return super.preHandle(req, resp);
 	}
 
 	/**
