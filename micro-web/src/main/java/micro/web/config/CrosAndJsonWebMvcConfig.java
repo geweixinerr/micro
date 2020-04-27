@@ -38,7 +38,7 @@ public class CrosAndJsonWebMvcConfig extends WebMvcConfigurationSupport {
 	private CrosMetadata crosMetadata;
 
 	/**
-	 * CROS 跨域配置
+	 * CROS 跨域配置, SpringBoot 2.2.6.RELEASE,allowedHeaders有bug,需要设置*才能生效
 	 * 
 	 * @author gewx
 	 **/
@@ -46,10 +46,9 @@ public class CrosAndJsonWebMvcConfig extends WebMvcConfigurationSupport {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping(crosMetadata.getPathPattern())
 				.allowedMethods(crosMetadata.getAllowMethods().toArray(new String[] {}))
-				.allowedOrigins(crosMetadata.getOrigins())
-				.allowedHeaders(crosMetadata.getAllowHeaders().toArray(new String[] {}))
+				.allowedOrigins(crosMetadata.getOrigins()).allowedHeaders("*")
 				.exposedHeaders(crosMetadata.getExposedHeaders().toArray(new String[] {}))
-				.allowCredentials(crosMetadata.isAllowCredentials());
+				.maxAge(crosMetadata.getMaxAge()).allowCredentials(crosMetadata.isAllowCredentials());
 	}
 
 	/**
