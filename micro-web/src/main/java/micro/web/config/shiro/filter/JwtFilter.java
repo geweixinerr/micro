@@ -111,11 +111,10 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 
-		resp.setHeader("Access-control-Allow-Origin", crosMetadata.getOrigins());
+		resp.setHeader("Access-control-Allow-Origin", req.getHeader("Origin"));
 		resp.setHeader("Access-Control-Allow-Methods",
 				crosMetadata.getAllowMethods().stream().collect(Collectors.joining(", ")));
-		resp.setHeader("Access-Control-Allow-Headers",
-				crosMetadata.getAllowHeaders().stream().collect(Collectors.joining(", ")));
+		resp.setHeader("Access-Control-Allow-Headers", req.getHeader("Access-Control-Request-Headers"));
 		resp.setHeader("Access-Control-Expose-Headers",
 				crosMetadata.getExposedHeaders().stream().collect(Collectors.joining(", ")));
 		resp.setHeader("Access-Control-Allow-Credentials", String.valueOf(crosMetadata.isAllowCredentials()));

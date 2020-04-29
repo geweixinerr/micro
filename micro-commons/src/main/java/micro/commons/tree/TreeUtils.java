@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import micro.commons.annotation.ThreadSafe;
-
 /**
  * 树形结构解析
  * 
  * @author gewx
  **/
-@ThreadSafe
 public final class TreeUtils {
 
 	/**
@@ -54,6 +51,22 @@ public final class TreeUtils {
 		recursion(node, nodeList);
 	}
 
+	/**
+	 * 检索树当中所有节点Id
+	 * 
+	 * @author gewx
+	 * @param rootNode
+	 * @return 节点Id集合
+	 **/
+	public static void searchNodeId(Node node, List<String> arrayNode) {
+		arrayNode.add(node.getId());
+		if (!node.getChildren().isEmpty()) {
+			node.getChildren().forEach(val -> {
+				searchNodeId(val, arrayNode);
+			});
+		}
+	}
+	
 	/**
 	 * 倒序递归检索所有父节点,由下往上直到所有根节点
 	 * 

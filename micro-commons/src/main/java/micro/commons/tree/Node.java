@@ -1,13 +1,15 @@
 package micro.commons.tree;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 树状结构顶层元素
@@ -69,5 +71,15 @@ public class Node implements Serializable {
 	@Override
 	public final int hashCode() {
 		return this.id.hashCode() * 31;
+	}
+
+	@Override
+	public String toString() {
+		ToStringBuilder sb = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		sb.append("id", this.id);
+		sb.append("parentId", this.parentId);
+		sb.append("sortNum", this.sortNum);
+		sb.append("children", this.children);
+		return sb.build();
 	}
 }

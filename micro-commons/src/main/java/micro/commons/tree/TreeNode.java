@@ -1,7 +1,5 @@
 package micro.commons.tree;
 
-import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +10,7 @@ import lombok.ToString;
  * @author gewx
  **/
 @ToString
-public final class TreeNode extends Node implements Serializable {
+public final class TreeNode extends Node {
 
 	private static final long serialVersionUID = 3564872935020099986L;
 
