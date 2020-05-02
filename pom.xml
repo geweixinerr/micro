@@ -31,7 +31,7 @@
 		<spring.cloud.version>Hoxton.SR1</spring.cloud.version>
 		<logstash.version>6.3</logstash.version>
 		<system.version>0.0.1-SNAPSHOT</system.version>
-		<pagehelper.version>1.2.5</pagehelper.version>
+		<pagehelper.version>1.2.13</pagehelper.version>
 	</properties>
 
 	<dependencyManagement>
