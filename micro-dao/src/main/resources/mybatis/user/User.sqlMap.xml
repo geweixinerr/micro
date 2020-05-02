@@ -7,7 +7,7 @@
 	<select id="listUser"
 		parameterType="java.util.Map" resultType="userDemo">
          <![CDATA[
-                SELECT u.`id`,u.`user_name` FROM  `user` u WHERE u.`id` = #{id,jdbcType=INTEGER}
+                SELECT u.`id`,u.`user_name` FROM  `user` u
          ]]>
 	</select>
 	

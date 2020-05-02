@@ -19,6 +19,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import micro.commons.jwt.Jwt;
 import micro.commons.jwt.JwtUtils;
+import micro.commons.log.MicroLogger;
+import micro.commons.util.StringUtil;
 import micro.web.config.cros.CrosMetadata;
 import micro.web.config.shiro.JwtToken;
 import micro.web.util.Response;
@@ -30,6 +32,11 @@ import micro.web.util.Response.GateWayCode;
  * @author gewx
  **/
 public final class JwtFilter extends BasicHttpAuthenticationFilter {
+
+	/**
+	 * 日志组件
+	 **/
+	private static final MicroLogger LOGGER = new MicroLogger(JwtFilter.class);
 
 	/**
 	 * 认证token
@@ -64,10 +71,13 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	 **/
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
+		final String methodName = "onAccessDenied";
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 
 		String token = ObjectUtils.defaultIfNull(req.getHeader(AUTH_TOKEN), req.getParameter(AUTH_TOKEN));
+		LOGGER.enter(methodName, "请求token: " + token);
+
 		if (StringUtils.isBlank(token)) {
 			String responseJson = JSONObject
 					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0001).toResult());
@@ -92,13 +102,16 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 					Jwt.create().setUserName(bean.getUserName()).setExpires(bean.getExpires()).build().sign());
 			getSubject(request, response).login(jwtToken);
 			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
+
+			LOGGER.exit(methodName, "响应token: " + jwtToken.getToken());
+			return true;
 		} catch (Exception ex) {
+			LOGGER.error("鉴权失败,ex: " + StringUtil.getErrorText(ex));
 			String responseJson = JSONObject
 					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("鉴权失败!").toResult());
 			outFail(resp, responseJson);
 			return false;
 		}
-		return true;
 	}
 
 	/**
