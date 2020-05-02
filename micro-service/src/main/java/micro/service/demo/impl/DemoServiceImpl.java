@@ -1,5 +1,6 @@
 package micro.service.demo.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -7,10 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import micro.commons.concurrent.ConcurrentOneByOne;
 import micro.commons.log.MicroLogger;
+import micro.commons.page.PageHelperUtils;
+import micro.commons.page.PageParameter;
+import micro.commons.page.Pages;
 import micro.dao.intf.DemoDao;
 import micro.bean.po.User;
 import micro.service.demo.DemoService;
 
+/**
+ * 示例Demo
+ * 
+ * @author gewx
+ **/
 @Service
 public class DemoServiceImpl implements DemoService {
 
@@ -26,11 +35,11 @@ public class DemoServiceImpl implements DemoService {
 	 * 支持并发处理
 	 **/
 	@Override
-	@Transactional(isolation = Isolation.READ_COMMITTED)
+	@Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 	public void syncDataById(int id) {
 		final String methodName = "syncDataForId";
 		LOGGER.enter(methodName, "业务数据同步服务[start], syncId: " + id);
-		
+
 		concurrent.key("concurrent").timeOut(5).execute(() -> {
 			User u = new User();
 			u.setId(String.valueOf(System.currentTimeMillis()));
@@ -53,5 +62,22 @@ public class DemoServiceImpl implements DemoService {
 	@Override
 	public User getUserById(String userName) {
 		return demoDao.getUserById(userName);
+	}
+
+	@Override
+	public Pages<User> listUser() {
+		final String methodName = "listUser";
+		LOGGER.enter(methodName, "业务执行");
+		PageParameter parameter = new PageParameter();
+		parameter.setStartpage(1);
+		parameter.setPagesize(20);
+		parameter.setSortname("id ;DROP TABLE tt; SELECT 1 FROM DUAL ORDER BY 1");
+
+		Pages<User> pages = PageHelperUtils.limit(parameter, () -> {
+			return demoDao.listUser(1024L);
+		});
+
+		LOGGER.exit(methodName, StringUtils.EMPTY);
+		return pages;
 	}
 }
