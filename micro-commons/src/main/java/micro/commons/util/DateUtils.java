@@ -1,32 +1,18 @@
 package micro.commons.util;
 
+import org.joda.time.*;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Hours;
-import org.joda.time.Interval;
-import org.joda.time.Seconds;
-import org.joda.time.Years;
-import org.joda.time.Minutes;
-import org.joda.time.Months;
-import org.joda.time.Period;
-
 /**
- * 日期工具类
+ * 日期工具类 基于Joda-time
  * 
  * @author gewx
  **/
 public final class DateUtils {
-
-	@SuppressWarnings({ "static-access", "rawtypes" })
-	private static final ThreadLocal<SimpleDateFormat> FORMAT = new ThreadLocal().withInitial(() -> {
-		SimpleDateFormat format = new SimpleDateFormat();
-		format.setLenient(false);
-		return format;
-	});
 
 	/**
 	 * 日期格式校验
@@ -37,12 +23,11 @@ public final class DateUtils {
 	 * @return true-验证通过, false-验证失败
 	 **/
 	public static boolean validDate(String strDate, String strFormat) {
-		SimpleDateFormat format = FORMAT.get();
 		try {
-			format.applyPattern(strFormat);
-			format.parse(strDate);
+			DateTimeFormatter format = DateTimeFormat.forPattern(strFormat);
+			format.parseDateTime(strDate);
 			return true;
-		} catch (ParseException e) {
+		} catch (IllegalArgumentException ex) {
 			return false;
 		}
 	}
@@ -57,9 +42,8 @@ public final class DateUtils {
 	 * @return 日期对象
 	 **/
 	public static Date parseDate(String strDate, String strFormat) throws ParseException {
-		SimpleDateFormat format = FORMAT.get();
-		format.applyPattern(strFormat);
-		return format.parse(strDate);
+		DateTimeFormatter format = DateTimeFormat.forPattern(strFormat);
+		return format.parseDateTime(strDate).toDate();
 	}
 
 	/**

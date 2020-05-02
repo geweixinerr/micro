@@ -31,6 +31,7 @@
 		<spring.cloud.version>Hoxton.SR1</spring.cloud.version>
 		<logstash.version>6.3</logstash.version>
 		<system.version>0.0.1-SNAPSHOT</system.version>
+		<pagehelper.version>1.2.13</pagehelper.version>
 	</properties>
 
 	<dependencyManagement>
@@ -185,6 +186,12 @@
 			<version>${logstash.version}</version>
 		</dependency>
 
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
