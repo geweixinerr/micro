@@ -1,9 +1,10 @@
 package micro.web.util;
 
+import com.github.pagehelper.Page;
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import lombok.Getter;
 
 /**
  * 网关响应设计
@@ -22,7 +23,7 @@ public enum Response {
 	 * 网关响应码枚举
 	 **/
 	@Getter
-	public static enum GateWayCode {
+	public enum GateWayCode {
 
 		/**
 		 * 网关默认响应,成功
@@ -38,17 +39,72 @@ public enum Response {
 		 * 登录超时
 		 **/
 		E0002("0002", "登录超时"),
-
+		
 		/**
-		 * 远程鉴权失败
+		 * 账号不存在
 		 **/
-		E0003("0003", "非法请求"),
+		E0003("0003", "账号不存在"),
+		
+		/**
+		 * 鉴权失败
+		 **/
+		E0100("0100", "鉴权失败"),
 		
 		/**
 		 * 权限不足
 		 **/
 		E0101("0101", "权限不足"),
 
+		/**
+		 * 通用数据校验失败
+		 **/
+		E0200("0200", "通用数据校验失败"),
+
+		/**
+		 * 缺失必填参数
+		 **/
+		E0201("0201", "缺失必填参数"),
+
+		/**
+		 * 数值格式不正确
+		 **/
+		E0202("0202", "数值格式不正确"),
+
+		/**
+		 * 文件上传容量过大
+		 **/
+		E0203("0203", "文件上传容量过大"),
+		
+		/**
+		 * 文件上传格式有误
+		 **/
+		E0204("0204", "不支持的文件上传格式"),
+		
+		/**
+		 * 入参枚举不匹配
+		 **/
+		E0205("0205", "入参枚举不匹配"),
+		
+		/**
+		 * SQL异常
+		 **/
+		E0300("0300", "数据操作异常"),
+		
+		/**
+		 * 业务异常
+		 **/
+		E9996("9996", "业务异常"),
+		
+		/**
+		 * 运行时异常
+		 **/
+		E9997("9997", "运行时异常"),
+		
+		/**
+		 * 并发异常
+		 **/
+		E9998("9998", "并发异常"),
+		
 		/**
 		 * 系统错误
 		 **/
@@ -145,6 +201,18 @@ public enum Response {
 		 **/
 		@SuppressWarnings("rawtypes")
 		public <T extends java.util.Collection> Map<String, Object> toResult(T model) {
+			Map<String, Object> map = buildMap();
+			map.put("data", model);
+			return map;
+		}
+
+		/**
+		 * 构建消息体
+		 * 
+		 * @author gewx
+		 * @return 消息体
+		 **/
+		public <T extends java.io.Serializable> Map<String, Object> toResult(Page<T> model) {
 			Map<String, Object> map = buildMap();
 			map.put("data", model);
 			return map;
