@@ -1,20 +1,5 @@
 package micro.web.config.shiro.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.stream.Collectors;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-
 import com.alibaba.fastjson.JSONObject;
 
 import micro.commons.jwt.Jwt;
@@ -25,6 +10,20 @@ import micro.web.config.cros.CrosMetadata;
 import micro.web.config.shiro.JwtToken;
 import micro.web.util.Response;
 import micro.web.util.Response.GateWayCode;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.stream.Collectors;
 
 /**
  * shiro + jwt权限控制
@@ -37,7 +36,7 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 	 * 日志组件
 	 **/
 	private static final MicroLogger LOGGER = new MicroLogger(JwtFilter.class);
-
+	
 	/**
 	 * 认证token
 	 **/
@@ -77,7 +76,6 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 
 		String token = ObjectUtils.defaultIfNull(req.getHeader(AUTH_TOKEN), req.getParameter(AUTH_TOKEN));
 		LOGGER.enter(methodName, "请求token: " + token);
-
 		if (StringUtils.isBlank(token)) {
 			String responseJson = JSONObject
 					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0001).toResult());
@@ -88,7 +86,6 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 		try {
 			// 本地鉴权
 			Jwt.JwtBean bean = JwtUtils.parseToken(token);
-
 			boolean bool = JwtUtils.verifyToken(bean);
 			if (!bool) {
 				String responseJson = JSONObject
@@ -102,13 +99,11 @@ public final class JwtFilter extends BasicHttpAuthenticationFilter {
 					Jwt.create().setUserName(bean.getUserName()).setExpires(bean.getExpires()).build().sign());
 			getSubject(request, response).login(jwtToken);
 			resp.setHeader(AUTH_TOKEN, jwtToken.getToken());
-
 			LOGGER.exit(methodName, "响应token: " + jwtToken.getToken());
 			return true;
 		} catch (Exception ex) {
-			LOGGER.error("鉴权失败,ex: " + StringUtil.getErrorText(ex));
-			String responseJson = JSONObject
-					.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E9999).out("鉴权失败!").toResult());
+			String responseJson = JSONObject.toJSONString(Response.FAIL.newBuilder().addGateWayCode(GateWayCode.E0100)
+					.out("鉴权失败,message: " + StringUtil.getErrorText(ex)).toResult());
 			outFail(resp, responseJson);
 			return false;
 		}
