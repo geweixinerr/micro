@@ -2,8 +2,12 @@ package micro.web.config;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +37,11 @@ import micro.web.config.cros.CrosMetadata;
 @Setter
 public class CrosAndJsonWebMvcConfig extends WebMvcConfigurationSupport {
 
+	/**
+	 * 日期格式化
+	 **/
+	private static final DateTimeFormatter FROMAT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+	
 	@Autowired
 	@Qualifier(value = "crosMetadata")
 	private CrosMetadata crosMetadata;
@@ -79,6 +88,14 @@ public class CrosAndJsonWebMvcConfig extends WebMvcConfigurationSupport {
 			}
 		});
 
+
+		simpleModule.addSerializer(Date.class, new JsonSerializer<Date>() {
+			@Override
+			public void serialize(Date time, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+				gen.writeString(new DateTime(time).toString(FROMAT));
+			}
+		});
+		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.registerModule(simpleModule);
