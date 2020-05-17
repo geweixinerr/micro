@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import micro.commons.concurrent.ConcurrentOneByOne;
 import micro.commons.log.MicroLogger;
-import micro.commons.page.PageHelperUtils;
 import micro.commons.page.PageParameter;
 import micro.commons.page.Pages;
+import micro.commons.util.PageHelperUtils;
 import micro.dao.intf.DemoDao;
 import micro.bean.po.User;
 import micro.service.demo.DemoService;

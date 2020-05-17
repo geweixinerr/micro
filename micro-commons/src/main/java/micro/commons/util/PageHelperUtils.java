@@ -1,4 +1,4 @@
-package micro.commons.page;
+package micro.commons.util;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -9,6 +9,8 @@ import com.github.pagehelper.PageHelper;
 
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.BusinessRuntimeException;
+import micro.commons.page.PageParameter;
+import micro.commons.page.Pages;
 
 /**
  * 分页工具类,基于PageHelper
