@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
+import net.logstash.logback.encoder.org.apache.commons.lang3.ObjectUtils;
 
 /**
  * 并发处理,基于Redis setNx控制
@@ -38,7 +39,9 @@ public final class ConcurrentLock {
 	/**
 	 * 分布式复合锁Key
 	 **/
-	private static final ThreadLocal<HashSet<String>> MULTIWAY = new ThreadLocal<>();
+	@SuppressWarnings("static-access")
+	private static final ThreadLocal<HashSet<String>> MULTIWAY = new ThreadLocal<>()
+			.withInitial(() -> new HashSet<>(8));
 
 	/**
 	 * 分布式复合锁计数器
@@ -59,7 +62,6 @@ public final class ConcurrentLock {
 	private RedisTemplate<String, String> redisTemplate;
 
 	public ConcurrentLock key(String key) {
-		// 升级复合锁,累加计数器
 		if (StringUtils.isNotBlank(KEY.get())) {
 			MULTIWAY.get().add(KEY.get());
 			MULTIWAY.get().add(key);
@@ -123,12 +125,7 @@ public final class ConcurrentLock {
 
 		boolean setNx = redisTemplate.opsForValue().setIfAbsent(key, VALUE, TIME_OUT.get(), TimeUnit.SECONDS);
 		if (!setNx) {
-			String tips = TIPS.get();
-			if (StringUtils.isNotBlank(tips)) {
-				throw new ConcurrentException(tips);
-			} else {
-				throw new ConcurrentException("concurrent Mode Fail~");
-			}
+			throw new ConcurrentException(ObjectUtils.defaultIfNull(TIPS.get(), "concurrent Mode Fail~"));
 		}
 	}
 
@@ -149,6 +146,7 @@ public final class ConcurrentLock {
 			if (counter.intValue() - 1 == 0) {
 				try {
 					MULTIWAY.get().stream().forEach(val -> {
+						System.out.println("删除---> " + val);
 						redisTemplate.delete(val);
 					});
 				} finally {
@@ -158,6 +156,7 @@ public final class ConcurrentLock {
 					TIPS.remove();
 				}
 			} else {
+				System.out.println("计数器---> " + (counter.intValue() - 1));
 				COUNTER.set(counter.intValue() - 1);
 			}
 		}
