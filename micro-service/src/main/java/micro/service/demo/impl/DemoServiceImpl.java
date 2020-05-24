@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import micro.commons.concurrent.ConcurrentOneByOne;
+import micro.commons.concurrent.ConcurrentLock;
 import micro.commons.log.MicroLogger;
 import micro.commons.page.PageParameter;
 import micro.commons.page.Pages;
@@ -29,7 +29,7 @@ public class DemoServiceImpl implements DemoService {
 	private DemoDao demoDao;
 
 	@Autowired
-	private ConcurrentOneByOne concurrent;
+	private ConcurrentLock concurrentLock;
 
 	/**
 	 * 支持并发处理
@@ -40,7 +40,7 @@ public class DemoServiceImpl implements DemoService {
 		final String methodName = "syncDataForId";
 		LOGGER.enter(methodName, "业务数据同步服务[start], syncId: " + id);
 
-		concurrent.key("concurrent").timeOut(5).execute(() -> {
+		concurrentLock.key("concurrent").timeOut(5).execute(() -> {
 			User u = new User();
 			u.setId(String.valueOf(System.currentTimeMillis()));
 			u.setUserName("Java");
