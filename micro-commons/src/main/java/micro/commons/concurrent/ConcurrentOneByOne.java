@@ -1,5 +1,6 @@
 package micro.commons.concurrent;
 
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,34 +21,51 @@ import micro.commons.exception.ConcurrentException;
 public final class ConcurrentOneByOne {
 
 	/**
-	 * 分布式锁VALUE 
-	 * **/
+	 * 分布式锁VALUE
+	 **/
 	private static final String VALUE = "TRUE";
 
 	/**
 	 * 分布式锁默认超时时间,单位:秒
-	 * **/
+	 **/
 	private static final int DEFAULT_TIME_OUT = 15;
 
 	/**
 	 * 分布式锁Key容器
-	 * **/
+	 **/
 	private static final ThreadLocal<String> KEY = new ThreadLocal<>();
 
 	/**
+	 * 分布式多路嵌套锁Key容器
+	 **/
+	private static final ThreadLocal<HashSet<String>> MULTIWAY = new ThreadLocal<>();
+
+	/**
+	 * 分布式多路嵌套锁计数器
+	 **/
+	private static final ThreadLocal<Integer> COUNTER = new ThreadLocal<>();
+
+	/**
 	 * 分布式锁超时数值容器
-	 * **/
+	 **/
 	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>();
 
 	/**
 	 * 分布式锁超时提示消息容器
-	 * **/
+	 **/
 	private static final ThreadLocal<String> TIPS = new ThreadLocal<>();
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 
 	public ConcurrentOneByOne key(String key) {
+		// 升级复合锁,累加计数器
+		if (StringUtils.isNotBlank(KEY.get())) {
+			MULTIWAY.get().add(KEY.get());
+			MULTIWAY.get().add(key);
+			COUNTER.set(MULTIWAY.get().size());
+		}
+
 		KEY.set(key);
 		TIME_OUT.set(DEFAULT_TIME_OUT);
 		return this;
@@ -118,12 +136,30 @@ public final class ConcurrentOneByOne {
 	 * 并发执行后置
 	 **/
 	private void after() {
-		try {
-			redisTemplate.delete(KEY.get());
-		} finally {
-			KEY.remove();
-			TIME_OUT.remove();
-			TIPS.remove();
+		if (MULTIWAY.get().isEmpty()) {
+			try {
+				redisTemplate.delete(KEY.get());
+			} finally {
+				KEY.remove();
+				TIME_OUT.remove();
+				TIPS.remove();
+			}
+		} else {
+			Integer counter = COUNTER.get();
+			if (counter.intValue() - 1 == 0) {
+				try {
+					MULTIWAY.get().stream().forEach(val -> {
+						redisTemplate.delete(val);
+					});
+				} finally {
+					MULTIWAY.remove();
+					KEY.remove();
+					TIME_OUT.remove();
+					TIPS.remove();
+				}
+			} else {
+				COUNTER.set(counter.intValue() - 1);
+			}
 		}
 	}
 }
