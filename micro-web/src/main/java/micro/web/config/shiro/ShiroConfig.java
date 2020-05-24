@@ -85,6 +85,7 @@ public class ShiroConfig {
 		// 登录,不过滤
 		filterChainDefinitionMap.put("/api/login", "anon");
 		filterChainDefinitionMap.put("/eureka/**", "anon");
+		filterChainDefinitionMap.put("/concurrent/**", "anon");
 
 		filterChainDefinitionMap.put("/**", "jwt");
 
