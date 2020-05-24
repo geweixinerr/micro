@@ -18,7 +18,7 @@ import micro.commons.exception.ConcurrentException;
  **/
 @Component
 @ThreadSafe
-public final class ConcurrentOneByOne {
+public final class ConcurrentLock {
 
 	/**
 	 * 分布式锁VALUE
@@ -58,7 +58,7 @@ public final class ConcurrentOneByOne {
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 
-	public ConcurrentOneByOne key(String key) {
+	public ConcurrentLock key(String key) {
 		// 升级复合锁,累加计数器
 		if (StringUtils.isNotBlank(KEY.get())) {
 			MULTIWAY.get().add(KEY.get());
@@ -78,7 +78,7 @@ public final class ConcurrentOneByOne {
 	 * @param timeOut 超时时间,单位:秒
 	 * @return ConcurrentOneByOne对象
 	 **/
-	public ConcurrentOneByOne timeOut(Integer timeOut) {
+	public ConcurrentLock timeOut(Integer timeOut) {
 		TIME_OUT.set(timeOut);
 		return this;
 	}
@@ -90,7 +90,7 @@ public final class ConcurrentOneByOne {
 	 * @param tips 提示信息
 	 * @return ConcurrentOneByOne对象
 	 **/
-	public ConcurrentOneByOne tips(String tips) {
+	public ConcurrentLock tips(String tips) {
 		TIPS.set(tips);
 		return this;
 	}
