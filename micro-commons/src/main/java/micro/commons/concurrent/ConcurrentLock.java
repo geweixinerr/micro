@@ -13,7 +13,7 @@ import micro.commons.exception.ConcurrentException;
 import net.logstash.logback.encoder.org.apache.commons.lang3.ObjectUtils;
 
 /**
- * 并发处理,基于Redis setNx控制
+ * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁累积超时时间建议<=根锁
  * 
  * @author gewx
  **/
