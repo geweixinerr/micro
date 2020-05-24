@@ -31,27 +31,27 @@ public final class ConcurrentLock {
 	private static final int DEFAULT_TIME_OUT = 15;
 
 	/**
-	 * 分布式锁Key容器
+	 * 分布式锁Key
 	 **/
 	private static final ThreadLocal<String> KEY = new ThreadLocal<>();
 
 	/**
-	 * 分布式多路嵌套锁Key容器
+	 * 分布式复合锁Key
 	 **/
 	private static final ThreadLocal<HashSet<String>> MULTIWAY = new ThreadLocal<>();
 
 	/**
-	 * 分布式多路嵌套锁计数器
+	 * 分布式复合锁计数器
 	 **/
 	private static final ThreadLocal<Integer> COUNTER = new ThreadLocal<>();
 
 	/**
-	 * 分布式锁超时数值容器
+	 * 分布式锁超时数值,单位:秒
 	 **/
 	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>();
 
 	/**
-	 * 分布式锁超时提示消息容器
+	 * 分布式锁超时提示消息
 	 **/
 	private static final ThreadLocal<String> TIPS = new ThreadLocal<>();
 
@@ -76,7 +76,7 @@ public final class ConcurrentLock {
 	 * 
 	 * @author gewx
 	 * @param timeOut 超时时间,单位:秒
-	 * @return ConcurrentOneByOne对象
+	 * @return ConcurrentLock对象
 	 **/
 	public ConcurrentLock timeOut(Integer timeOut) {
 		TIME_OUT.set(timeOut);
@@ -88,7 +88,7 @@ public final class ConcurrentLock {
 	 * 
 	 * @author gewx
 	 * @param tips 提示信息
-	 * @return ConcurrentOneByOne对象
+	 * @return ConcurrentLock对象
 	 **/
 	public ConcurrentLock tips(String tips) {
 		TIPS.set(tips);
