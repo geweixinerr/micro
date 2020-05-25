@@ -28,11 +28,6 @@ public final class ConcurrentLock {
 	private static final String VALUE = "TRUE";
 
 	/**
-	 * 分布式锁默认超时时间,单位:秒
-	 **/
-	private static final int DEFAULT_TIME_OUT = 15;
-
-	/**
 	 * 分布式锁Key
 	 **/
 	private static final ThreadLocal<String> KEY = new ThreadLocal<>();
@@ -49,9 +44,9 @@ public final class ConcurrentLock {
 	private static final ThreadLocal<Integer> COUNTER = new ThreadLocal<>().withInitial(() -> 0);
 
 	/**
-	 * 分布式锁超时数值,单位:秒
+	 * 分布式锁超时数值,默认10. 单位:秒
 	 **/
-	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>().withInitial(() -> DEFAULT_TIME_OUT);
+	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>().withInitial(() -> 10);
 
 	/**
 	 * 分布式锁超时提示消息
