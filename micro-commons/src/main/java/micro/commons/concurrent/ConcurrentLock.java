@@ -3,6 +3,7 @@ package micro.commons.concurrent;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
-import net.logstash.logback.encoder.org.apache.commons.lang3.ObjectUtils;
 
 /**
  * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁累积超时时间建议<=根锁
