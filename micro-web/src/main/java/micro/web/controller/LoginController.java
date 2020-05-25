@@ -42,7 +42,7 @@ public class LoginController {
 	public Map<String, Object> login(String userName, String password, HttpServletRequest req,
 			HttpServletResponse resp) {
 		final String methodName = "cros";
-		LOGGER.enter(methodName, "cros客户端请求[start], userName: " + userName + ", password: " + password, false);
+		LOGGER.enter(methodName, "cros客户端请求[start], userName: " + userName + ", password: " + password);
 		
 		Pages<User> page = demoService.listUser();
 		LOGGER.info("数据集: " + page);
