@@ -51,7 +51,7 @@ public final class ConcurrentLock {
 	/**
 	 * 分布式锁超时数值,单位:秒
 	 **/
-	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>();
+	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>().withInitial(() -> DEFAULT_TIME_OUT);
 
 	/**
 	 * 分布式锁超时提示消息
@@ -68,7 +68,6 @@ public final class ConcurrentLock {
 		}
 
 		KEY.set(key);
-		TIME_OUT.set(DEFAULT_TIME_OUT);
 		return this;
 	}
 
