@@ -19,7 +19,6 @@ import micro.commons.exception.ConcurrentException;
  **/
 @Component
 @ThreadSafe
-@SuppressWarnings("static-access")
 public final class ConcurrentLock {
 
 	/**
@@ -33,25 +32,24 @@ public final class ConcurrentLock {
 	private static final ThreadLocal<String> KEY = new ThreadLocal<>();
 
 	/**
+	 * 分布式锁超时提示消息
+	 **/
+	private static final ThreadLocal<String> TIPS = new ThreadLocal<>();
+	
+	/**
 	 * 分布式复合锁Key
 	 **/
-	private static final ThreadLocal<HashSet<String>> MULTIWAY = new ThreadLocal<>()
-			.withInitial(() -> new HashSet<>(8));
+	private static final ThreadLocal<HashSet<String>> MULTIWAY = ThreadLocal.withInitial(() -> new HashSet<>(8));
 
 	/**
 	 * 分布式复合锁计数器
 	 **/
-	private static final ThreadLocal<Integer> COUNTER = new ThreadLocal<>().withInitial(() -> 0);
+	private static final ThreadLocal<Integer> COUNTER = ThreadLocal.withInitial(() -> 0);
 
 	/**
 	 * 分布式锁超时数值,默认10. 单位:秒
 	 **/
-	private static final ThreadLocal<Integer> TIME_OUT = new ThreadLocal<>().withInitial(() -> 10);
-
-	/**
-	 * 分布式锁超时提示消息
-	 **/
-	private static final ThreadLocal<String> TIPS = new ThreadLocal<>();
+	private static final ThreadLocal<Integer> TIME_OUT = ThreadLocal.withInitial(() -> 10);
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
