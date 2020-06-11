@@ -48,4 +48,25 @@ public final class MapUtils {
 		}
 		return bool;
 	}
+	
+
+	/**
+	 * @author gewx 验证map设定非空字段是否为空
+	 * @param params :目标map,args:校验数组
+	 * @return boolean
+	 **/
+	public static boolean isNumericMap(Map<String, ?> params, String[] args) {
+		if (params == null || args == null || params.isEmpty() || args.length == 0) {
+			return false;
+		}
+
+		boolean bool = true;
+		for (String arg : args) {
+			if (!StringUtils.isNumeric(getString(params.get(arg)))) {
+				bool = false;
+				break;
+			}
+		}
+		return bool;
+	}
 }
