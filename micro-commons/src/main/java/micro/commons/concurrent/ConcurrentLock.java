@@ -35,7 +35,7 @@ public final class ConcurrentLock {
 	 * 分布式锁超时提示消息
 	 **/
 	private static final ThreadLocal<String> TIPS = new ThreadLocal<>();
-	
+
 	/**
 	 * 分布式复合锁Key
 	 **/
@@ -45,6 +45,11 @@ public final class ConcurrentLock {
 	 * 分布式复合锁计数器
 	 **/
 	private static final ThreadLocal<Integer> COUNTER = ThreadLocal.withInitial(() -> 0);
+
+	/**
+	 * 自动释放锁标记
+	 **/
+	private static final ThreadLocal<Boolean> AUTOMATIC = ThreadLocal.withInitial(() -> Boolean.TRUE);
 
 	/**
 	 * 分布式锁超时数值,默认10. 单位:秒
@@ -89,6 +94,18 @@ public final class ConcurrentLock {
 	}
 
 	/**
+	 * 设置锁释放模式
+	 * 
+	 * @author gewx
+	 * @param autoLock true-自动释放,false-手工释放
+	 * @return ConcurrentLock对象
+	 **/
+	public ConcurrentLock automatic(boolean bool) {
+		AUTOMATIC.set(bool);
+		return this;
+	}
+
+	/**
 	 * 并发执行过程
 	 * 
 	 * @author gewx
@@ -108,8 +125,48 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				after();
+				if (AUTOMATIC.get()) {
+					after();
+				}
 			}
+		}
+	}
+
+	/**
+	 * 并发执行过程
+	 * 
+	 * @author gewx
+	 * @param execute 并发执行过程对象
+	 * @return void
+	 **/
+	public <T> void run(OneByOne<T> execute) {
+		Exception exception = null;
+		try {
+			try {
+				before();
+				execute.invoke();
+			} catch (Exception ex) {
+				exception = ex;
+				throw ex;
+			}
+		} finally {
+			if (!(exception instanceof ConcurrentException)) {
+				if (AUTOMATIC.get()) {
+					after();
+				}
+			}
+		}
+	}
+
+	/**
+	 * 手工释放锁
+	 * 
+	 * @author gewx
+	 * @return void
+	 **/
+	public void release() {
+		if (!AUTOMATIC.get()) {
+			after();
 		}
 	}
 
@@ -139,20 +196,20 @@ public final class ConcurrentLock {
 				KEY.remove();
 				TIME_OUT.remove();
 				TIPS.remove();
+				AUTOMATIC.remove();
 			}
 		} else {
 			COUNTER.set(COUNTER.get() + 1);
 			if (COUNTER.get().intValue() == MULTIWAY.get().size()) {
 				try {
-					MULTIWAY.get().stream().forEach(val -> {
-						redisTemplate.delete(val);
-					});
+					MULTIWAY.get().stream().forEach(redisTemplate::delete);
 				} finally {
 					MULTIWAY.remove();
 					COUNTER.remove();
 					KEY.remove();
 					TIME_OUT.remove();
 					TIPS.remove();
+					AUTOMATIC.remove();
 				}
 			}
 		}
