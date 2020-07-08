@@ -6,7 +6,7 @@ package micro.commons.concurrent;
  * @author gewx
  **/
 @FunctionalInterface
-public interface OneByOne<T> {
+public interface Callable<T> {
 
 	/**
 	 * 分布式锁执行单元

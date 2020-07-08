@@ -13,7 +13,7 @@ import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
 
 /**
- * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁累积超时时间建议<=根锁
+ * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁超时时间建议<根锁
  * 
  * @author gewx
  **/
@@ -112,7 +112,7 @@ public final class ConcurrentLock {
 	 * @param execute 并发执行过程对象
 	 * @return T 返回结果对象
 	 **/
-	public <T> T execute(OneByOne<T> execute) {
+	public <T> T execute(Callable<T> execute) {
 		Exception exception = null;
 		try {
 			try {
@@ -139,7 +139,7 @@ public final class ConcurrentLock {
 	 * @param execute 并发执行过程对象
 	 * @return void
 	 **/
-	public <T> void run(OneByOne<T> execute) {
+	public <T> void run(Runnable execute) {
 		Exception exception = null;
 		try {
 			try {
