@@ -1,20 +1,19 @@
 package micro.commons.util;
 
-import static micro.commons.util.StringUtil.*;
+import static micro.commons.util.StringUtil.*; 
+
 import lombok.ToString;
 import micro.commons.annotation.ThreadSafe;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang3.StringUtils;
-
 
 /**
  * 验证框架工具类
@@ -60,6 +59,18 @@ public final class ValidatorUtils {
 	 * 验证工具方法
 	 *
 	 * @author pengqh
+	 * @param list 验证集合bean
+	 * @param args 过滤字段
+	 * @return 验证消息Bean
+	 **/
+	public static <T> FieldBean validator(List<T> list, String... args) {
+		return validator(list, true, args);
+	}
+
+	/**
+	 * 验证工具方法
+	 *
+	 * @author pengqh
 	 * @param bean 验证bean
 	 * @param bool 过滤条件反转:true|过滤传递字段, false|过滤未传递字段
 	 * @param args 过滤字段
@@ -77,6 +88,18 @@ public final class ValidatorUtils {
 			return new FieldBean(item.getMessageTemplate(), Boolean.TRUE);
 		}
 		return new FieldBean(StringUtils.EMPTY, Boolean.FALSE);
+	}
+
+	/**
+	 * 验证工具方法
+	 *
+	 * @author pengqh
+	 * @param bean 验证bean
+	 * @param args 过滤字段
+	 * @return 验证消息Bean
+	 **/
+	public static <T> FieldBean validator(T bean, String... args) {
+		return validator(bean, true, args);
 	}
 
 	/**
