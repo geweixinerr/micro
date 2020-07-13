@@ -1,9 +1,11 @@
 package micro.commons.util;
 
-import java.util.Collection;
-import java.util.Map;
-
 import static micro.commons.util.StringUtil.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -97,6 +99,49 @@ public final class FeignRpcUtils {
 	}
 
 	/**
+	 * 获取RPC结果集
+	 * 
+	 * @author liangd
+	 * @param methodName    方法名
+	 * @param map           RPC响应结果
+	 * @param typeReference 转换
+	 * @return 响应结果集
+	 **/
+	public static <T> T handleRpcResult(String methodName, Map<String, Object> map, TypeReference<T> typeReference) {
+		LOGGER.enter(methodName, StringUtils.EMPTY);
+		FeignRpcUtils.Result rpcResult = FeignRpcUtils.getResult(map);
+		LOGGER.info(methodName, "RPC调用响应, rpcResult: " + rpcResult);
+		if (rpcResult.isAllSuccess()) {
+			Object data = rpcResult.getData();
+			if (null != data) {
+				String rpcResultDataJson = JSONObject.toJSONString(data);
+				T t = JSONObject.parseObject(rpcResultDataJson, typeReference);
+				LOGGER.info(methodName, "RPC调用响应, rpcData: " + t);
+				LOGGER.exit(methodName, StringUtils.EMPTY);
+				return t;
+			}
+			return null;
+		} else {
+			throw new BusinessRuntimeException("RPC调用失败或未查询到相关信息~");
+		}
+	}
+	
+	/**
+	 * 设置token
+	 * 
+	 *  @author gewx
+	 *  @param token 认证token
+	 *  @return void
+	 * **/
+	public static void setToken(String token) {
+		Collection<String> collections = new ArrayList<>();
+		collections.add(token);
+		Map<String, Collection<String>> headers = new HashMap<>();
+		headers.put(TOKEN, collections);
+		ThreadContextEnum.HEADER.setVal(headers); 
+	}
+	
+	/**
 	 * RPC响应结果集对象
 	 **/
 	@Getter
@@ -133,34 +178,6 @@ public final class FeignRpcUtils {
 		 **/
 		public Boolean isAllSuccess() {
 			return this.success && SUCCESS.equals(this.code);
-		}
-	}
-
-	/**
-	 * 获取RPC结果集
-	 * 
-	 * @author liangd
-	 * @param methodName    方法名
-	 * @param map           RPC响应结果
-	 * @param typeReference 转换
-	 * @return 响应结果集
-	 **/
-	public static <T> T handleRpcResult(String methodName, Map<String, Object> map, TypeReference<T> typeReference) {
-		LOGGER.enter(methodName, StringUtils.EMPTY);
-		FeignRpcUtils.Result rpcResult = FeignRpcUtils.getResult(map);
-		LOGGER.info(methodName, "RPC调用响应, rpcResult: " + rpcResult);
-		if (rpcResult.isAllSuccess()) {
-			Object data = rpcResult.getData();
-			if (null != data) {
-				String rpcResultDataJson = JSONObject.toJSONString(data);
-				T t = JSONObject.parseObject(rpcResultDataJson, typeReference);
-				LOGGER.info(methodName, "RPC调用响应, rpcData: " + t);
-				LOGGER.exit(methodName, StringUtils.EMPTY);
-				return t;
-			}
-			return null;
-		} else {
-			throw new BusinessRuntimeException("RPC调用失败或未查询到相关信息~");
 		}
 	}
 }

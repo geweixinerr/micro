@@ -11,7 +11,6 @@ import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 import feign.FeignException;
 import feign.Logger;
 import feign.Response;
@@ -54,5 +53,15 @@ public class FeignConfiguration {
 				return super.decode(response, type);
 			}
 		}));
+	}
+	
+	/**
+	 * Feign拦截器
+	 * 
+	 * @author gewx
+	 **/
+	@Bean
+	public FeignBasicAuthRequestInterceptor basicAuthRequestInterceptor() {
+		return new FeignBasicAuthRequestInterceptor();
 	}
 }
