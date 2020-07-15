@@ -1,11 +1,11 @@
 package micro.web.util;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import micro.commons.annotation.ThreadSafe;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author gewx Http请求辅助类
@@ -15,8 +15,10 @@ public final class HttpRequestUtils {
 
 	/**
 	 * 代理服务器请求头
-	 * **/ 
+	 **/
 	private static final String PROXY_HEADER = "X-Forwarded-For";
+
+	private static final String X_REAL_IP = "X-Real-IP";
 
 	private HttpRequestUtils() {
 
@@ -31,9 +33,14 @@ public final class HttpRequestUtils {
 	 **/
 	public static String getRemoteAddrIp(HttpServletRequest request) {
 		String header = request.getHeader(PROXY_HEADER);
-		if (StringUtils.isBlank(header)) {
+		String realIp = request.getHeader(X_REAL_IP);
+		if (StringUtils.isAllBlank(header, realIp)) {
 			return request.getRemoteAddr();
 		} else {
+			if (StringUtils.isNotBlank(realIp)) {
+				return realIp;
+			}
+
 			String[] ipArray = StringUtils.split(header, ",");
 			if (ArrayUtils.isNotEmpty(ipArray)) {
 				return ipArray[0];
