@@ -7,16 +7,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.core.type.TypeReference;
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.enums.ThreadContextEnum;
 import micro.commons.exception.BusinessRuntimeException;
 import micro.commons.log.MicroLogger;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.ToString;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -114,8 +113,8 @@ public final class FeignRpcUtils {
 		if (rpcResult.isAllSuccess()) {
 			Object data = rpcResult.getData();
 			if (null != data) {
-				String rpcResultDataJson = JSONObject.toJSONString(data);
-				T t = JSONObject.parseObject(rpcResultDataJson, typeReference);
+				String rpcResultDataJson = JSONUtils.NON_NULL.toJSONString(data);
+				T t = JSONUtils.NON_NULL.toJavaObject(rpcResultDataJson, typeReference);
 				LOGGER.info(methodName, "RPC调用响应, rpcData: " + t);
 				LOGGER.exit(methodName, StringUtils.EMPTY);
 				return t;
