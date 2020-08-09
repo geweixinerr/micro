@@ -1,12 +1,24 @@
 package micro.commons.util;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import micro.commons.exception.JSONParseException;
 
@@ -26,6 +38,24 @@ public enum JSONUtils {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, bool);
 		mapper.setSerializationInclusion(include);
+
+		DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+		SimpleModule simpleModule = new SimpleModule();
+		simpleModule.addSerializer(BigDecimal.class, new JsonSerializer<BigDecimal>() {
+			@Override
+			public void serialize(BigDecimal decimal, JsonGenerator gen, SerializerProvider serializers)
+					throws IOException {
+				gen.writeString(decimal.toPlainString());
+			}
+		});
+
+		simpleModule.addSerializer(Date.class, new JsonSerializer<Date>() {
+			@Override
+			public void serialize(Date time, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+				gen.writeString(new DateTime(time).toString(format));
+			}
+		});
+		mapper.registerModule(simpleModule);
 	}
 
 	private final ObjectMapper mapper;
