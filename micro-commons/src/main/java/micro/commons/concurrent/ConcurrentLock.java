@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
 
+
 /**
  * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁超时时间建议<根锁
  * 
@@ -45,11 +46,6 @@ public final class ConcurrentLock {
 	 * 分布式复合锁计数器
 	 **/
 	private static final ThreadLocal<Integer> COUNTER = ThreadLocal.withInitial(() -> 0);
-
-	/**
-	 * 自动释放锁标记
-	 **/
-	private static final ThreadLocal<Boolean> AUTOMATIC = ThreadLocal.withInitial(() -> Boolean.TRUE);
 
 	/**
 	 * 分布式锁超时数值,默认10. 单位:秒
@@ -94,18 +90,6 @@ public final class ConcurrentLock {
 	}
 
 	/**
-	 * 设置锁释放模式
-	 * 
-	 * @author gewx
-	 * @param autoLock true-自动释放,false-手工释放
-	 * @return ConcurrentLock对象
-	 **/
-	public ConcurrentLock automatic(boolean bool) {
-		AUTOMATIC.set(bool);
-		return this;
-	}
-
-	/**
 	 * 并发执行过程
 	 * 
 	 * @author gewx
@@ -125,9 +109,7 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				if (AUTOMATIC.get()) {
-					after();
-				}
+				after();
 			}
 		}
 	}
@@ -137,9 +119,9 @@ public final class ConcurrentLock {
 	 * 
 	 * @author gewx
 	 * @param execute 并发执行过程对象
-	 * @return void
+	 * @return T 返回结果对象
 	 **/
-	public <T> void run(Runnable execute) {
+	public void run(Runnable execute) {
 		Exception exception = null;
 		try {
 			try {
@@ -151,22 +133,8 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				if (AUTOMATIC.get()) {
-					after();
-				}
+				after();
 			}
-		}
-	}
-
-	/**
-	 * 手工释放锁
-	 * 
-	 * @author gewx
-	 * @return void
-	 **/
-	public void release() {
-		if (!AUTOMATIC.get()) {
-			after();
 		}
 	}
 
@@ -196,20 +164,20 @@ public final class ConcurrentLock {
 				KEY.remove();
 				TIME_OUT.remove();
 				TIPS.remove();
-				AUTOMATIC.remove();
 			}
 		} else {
 			COUNTER.set(COUNTER.get() + 1);
 			if (COUNTER.get().intValue() == MULTIWAY.get().size()) {
 				try {
-					MULTIWAY.get().stream().forEach(redisTemplate::delete);
+					MULTIWAY.get().stream().forEach(val -> {
+						redisTemplate.delete(val);
+					});
 				} finally {
 					MULTIWAY.remove();
 					COUNTER.remove();
 					KEY.remove();
 					TIME_OUT.remove();
 					TIPS.remove();
-					AUTOMATIC.remove();
 				}
 			}
 		}
