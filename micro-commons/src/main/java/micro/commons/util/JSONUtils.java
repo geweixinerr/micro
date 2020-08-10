@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -41,6 +42,7 @@ public enum JSONUtils {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, bool);
 		mapper.setSerializationInclusion(include);
+		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
 		DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 		SimpleModule simpleModule = new SimpleModule();
