@@ -4,6 +4,8 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 import java.util.function.Supplier;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -21,33 +23,33 @@ import micro.commons.page.Pages;
 public final class PageHelperUtils {
 
 	private static int ZERO = 0;
-	
+
 	/**
 	 * 通用分页方法
 	 * 
 	 * @author gewx
-	 * @param pageParameter 分页参数
+	 * @param parameter  分页参数
 	 * @param pageResult 分页数据集
 	 * @return void
 	 **/
-	public static <T> Pages<T> limit(PageParameter pageParameter, Supplier<Page<T>> pageResult) {
-		if (pageParameter.getStartpage() == null) {
+	public static <T> Pages<T> limit(PageParameter parameter, Supplier<Page<T>> pageResult) {
+		if (parameter.getStartpage() == null) {
 			throw new BusinessRuntimeException("页码必填");
 		}
-		
-		if (pageParameter.getPagesize() == null) {
+
+		if (parameter.getPagesize() == null) {
 			throw new BusinessRuntimeException("页行必填");
 		}
-		
-		if (pageParameter.getPagesize().intValue() == ZERO) {
+
+		if (parameter.getPagesize().intValue() == ZERO) {
 			throw new BusinessRuntimeException("页行必须大于0");
 		}
-		
-		PageHelper.startPage(pageParameter.getStartpage(), pageParameter.getPagesize());
-		if (isNotBlank(pageParameter.getSortname())) {
-			PageHelper.orderBy(pageParameter.getSortname());
-			if (pageParameter.isSymbol()) {
-				PageHelper.orderBy(pageParameter.getSortname() + " DESC");
+
+		PageHelper.startPage(parameter.getStartpage(), parameter.getPagesize(), false);
+		if (isNotBlank(parameter.getSortname())) {
+			PageHelper.orderBy(parameter.getSortname());
+			if (parameter.isSymbol()) {
+				PageHelper.orderBy(parameter.getSortname() + " DESC");
 			}
 		}
 
@@ -59,5 +61,22 @@ public final class PageHelperUtils {
 		pages.setPageSize(page.getPageSize());
 		pages.setPages(page.getResult());
 		return pages;
+	}
+
+	/**
+	 * 判断查询数据是否存在
+	 * 
+	 * @author gewx
+	 * @param pageResult 分页数据集
+	 * @return boolean
+	 **/
+	public static <T> boolean isExists(Supplier<Page<T>> pageResult) {
+		PageParameter parameter = new PageParameter();
+		parameter.setStartpage(1);
+		parameter.setPagesize(1);
+
+		PageHelper.startPage(parameter.getStartpage(), parameter.getPagesize(), false);
+
+		return CollectionUtils.isNotEmpty(pageResult.get());
 	}
 }
