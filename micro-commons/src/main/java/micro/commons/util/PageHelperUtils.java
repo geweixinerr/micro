@@ -45,7 +45,7 @@ public final class PageHelperUtils {
 			throw new BusinessRuntimeException("页行必须大于0");
 		}
 
-		PageHelper.startPage(parameter.getStartpage(), parameter.getPagesize(), false);
+		PageHelper.startPage(parameter.getStartpage(), parameter.getPagesize());
 		if (isNotBlank(parameter.getSortname())) {
 			PageHelper.orderBy(parameter.getSortname());
 			if (parameter.isSymbol()) {
