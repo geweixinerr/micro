@@ -39,7 +39,7 @@ public class PatternValid implements ConstraintValidator<Pattern, String> {
 				return java.util.regex.Pattern.compile(pattern.regexp());
 			}).get(pattern.regexp());
 
-			return regex.matcher(pattern.regexp()).matches();
+			return regex.matcher(value).matches();
 		}
 		return true;
 	}
