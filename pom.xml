@@ -32,6 +32,7 @@
 		<logstash.version>6.3</logstash.version>
 		<system.version>0.0.1-SNAPSHOT</system.version>
 		<pagehelper.version>1.2.13</pagehelper.version>
+		<commons.collections4.version>4.4</commons.collections4.version>
 	</properties>
 
 	<dependencyManagement>
@@ -159,6 +160,12 @@
 				<artifactId>commons-pool2</artifactId>
 				<version>${commons-pool2}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>${commons.collections4.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -203,13 +210,13 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>6.1.5.Final</version>
 		</dependency>
-						
+
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.el</artifactId>
 			<version>3.0.1-b10</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
