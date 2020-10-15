@@ -32,9 +32,9 @@ public class ValidatedValid implements ConstraintValidator<Validated, Object> {
 		if (bean != null) {
 			ValidatorUtils.FieldBean fieldBean = null;
 			if (Collection.class.isInstance(bean)) {
-				fieldBean = ValidatorUtils.validator((Collection) bean);
+				fieldBean = ValidatorUtils.validator((Collection) bean, validated.ignoreMode(), validated.ignore());
 			} else {
-				fieldBean = ValidatorUtils.validator(bean);
+				fieldBean = ValidatorUtils.validator(bean, validated.ignoreMode(), validated.ignore());
 			}
 			if (fieldBean.isSuccess()) {
 				context.disableDefaultConstraintViolation();
