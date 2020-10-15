@@ -1,6 +1,6 @@
 package micro.commons.annotation.valid;
 
-import java.io.Serializable;
+import java.util.Collection;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,7 +13,7 @@ import micro.commons.util.ValidatorUtils;
  * 
  * @author gewx
  **/
-public class ValidatedValid implements ConstraintValidator<Validated, Serializable> {
+public class ValidatedValid implements ConstraintValidator<Validated, Object> {
 
 	private Validated validated;
 
@@ -22,14 +22,20 @@ public class ValidatedValid implements ConstraintValidator<Validated, Serializab
 		this.validated = validated;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean isValid(Serializable bean, ConstraintValidatorContext context) {
+	public boolean isValid(Object bean, ConstraintValidatorContext context) {
 		if (validated.required() && bean == null) {
 			return false;
 		}
 
 		if (bean != null) {
-			ValidatorUtils.FieldBean fieldBean = ValidatorUtils.validator(bean);
+			ValidatorUtils.FieldBean fieldBean = null;
+			if (Collection.class.isInstance(bean)) {
+				fieldBean = ValidatorUtils.validator((Collection) bean);
+			} else {
+				fieldBean = ValidatorUtils.validator(bean);
+			}
 			if (fieldBean.isSuccess()) {
 				context.disableDefaultConstraintViolation();
 				context.buildConstraintViolationWithTemplate(fieldBean.getMsg()).addConstraintViolation();
