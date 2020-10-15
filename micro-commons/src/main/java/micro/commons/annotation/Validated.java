@@ -29,6 +29,16 @@ public @interface Validated {
 
 	boolean required() default false;
 
+	/**
+	 * 忽略模式: true-传递的忽略,false=未传递的忽略
+	 * **/
+	boolean ignoreMode() default true; 
+	
+	/**
+	 * 忽略的数组
+	 * **/
+	String [] ignore() default {};
+	
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
