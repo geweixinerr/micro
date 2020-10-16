@@ -11,7 +11,7 @@ import javax.validation.Payload;
 
 import org.apache.commons.lang3.StringUtils;
 
-import micro.commons.annotation.valid.ValidatedValid;
+import micro.commons.annotation.valid.ValidatedsValid;
 
 /**
  * DTO校验注解
@@ -20,8 +20,8 @@ import micro.commons.annotation.valid.ValidatedValid;
  * **/
 @Retention(RUNTIME)
 @Target(FIELD)
-@Constraint(validatedBy = { ValidatedValid.class })
-public @interface Validated {
+@Constraint(validatedBy = { ValidatedsValid.class })
+public @interface Validateds {
 	
 	String value() default StringUtils.EMPTY;
 

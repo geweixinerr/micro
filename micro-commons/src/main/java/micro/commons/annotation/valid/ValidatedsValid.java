@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import micro.commons.annotation.Validated;
+import micro.commons.annotation.Validateds;
 import micro.commons.util.ValidatorUtils;
 
 /**
@@ -13,12 +13,12 @@ import micro.commons.util.ValidatorUtils;
  * 
  * @author gewx
  **/
-public class ValidatedValid implements ConstraintValidator<Validated, Object> {
+public class ValidatedsValid implements ConstraintValidator<Validateds, Object> {
 
-	private Validated validated;
+	private Validateds validated;
 
 	@Override
-	public void initialize(Validated validated) {
+	public void initialize(Validateds validated) {
 		this.validated = validated;
 	}
 
