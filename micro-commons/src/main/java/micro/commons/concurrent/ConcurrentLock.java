@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
 
-
 /**
  * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁超时时间建议<根锁
  * 
@@ -144,12 +143,12 @@ public final class ConcurrentLock {
 	private void before() {
 		String key = KEY.get();
 		if (StringUtils.isBlank(key)) {
-			throw new ConcurrentException("concurrent Key is Empty~");
+			throw new ConcurrentException("并发异常,锁钥缺失~");
 		}
 
 		boolean setNx = redisTemplate.opsForValue().setIfAbsent(key, VALUE, TIME_OUT.get(), TimeUnit.SECONDS);
 		if (!setNx) {
-			throw new ConcurrentException(ObjectUtils.defaultIfNull(TIPS.get(), "concurrent Mode Fail~"));
+			throw new ConcurrentException(ObjectUtils.defaultIfNull(TIPS.get(), "并发异常,请联系管理员!"));
 		}
 	}
 
@@ -169,9 +168,7 @@ public final class ConcurrentLock {
 			COUNTER.set(COUNTER.get() + 1);
 			if (COUNTER.get().intValue() == MULTIWAY.get().size()) {
 				try {
-					MULTIWAY.get().stream().forEach(val -> {
-						redisTemplate.delete(val);
-					});
+					MULTIWAY.get().stream().forEach(redisTemplate::delete);
 				} finally {
 					MULTIWAY.remove();
 					COUNTER.remove();
