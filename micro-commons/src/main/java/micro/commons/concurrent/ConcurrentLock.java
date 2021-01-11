@@ -138,6 +138,16 @@ public final class ConcurrentLock {
 	}
 
 	/**
+	 * 主动释放锁,解决某些锁内资源异步情况下锁冲突问题[注:需要与幂等设计配合]
+	 * 
+	 * @author gewx
+	 * @return void
+	 **/
+	public void release() {
+		after();
+	}
+
+	/**
 	 * 并发执行前置
 	 **/
 	private void before() {
