@@ -27,6 +27,11 @@ public final class ConcurrentLock {
 	private static final String VALUE = "TRUE";
 
 	/**
+	 * 分布式锁自动释放标记
+	 **/
+	private static final ThreadLocal<Boolean> AUTOMATIC = ThreadLocal.withInitial(() -> true);
+
+	/**
 	 * 分布式锁Key
 	 **/
 	private static final ThreadLocal<String> KEY = new ThreadLocal<>();
@@ -77,6 +82,18 @@ public final class ConcurrentLock {
 	}
 
 	/**
+	 * 设置是否锁自动释放
+	 * 
+	 * @author gewx
+	 * @param automatic true/false
+	 * @return ConcurrentLock对象
+	 **/
+	public ConcurrentLock automatic(Boolean automatic) {
+		AUTOMATIC.set(automatic);
+		return this;
+	}
+
+	/**
 	 * 设置并发异常提示信息
 	 * 
 	 * @author gewx
@@ -108,7 +125,13 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				after();
+				try {
+					if (AUTOMATIC.get()) {
+						after();
+					}
+				} finally {
+					AUTOMATIC.remove();
+				}
 			}
 		}
 	}
@@ -132,19 +155,27 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				after();
+				try {
+					if (AUTOMATIC.get()) {
+						after();
+					}
+				} finally {
+					AUTOMATIC.remove();
+				}
 			}
 		}
 	}
 
 	/**
-	 * 主动释放锁,解决某些锁内资源异步情况下锁冲突问题[注:需要与幂等设计配合]
+	 * 手工释放锁,解决某些锁内资源异步情况下锁冲突问题[注:需要与幂等设计配合]
 	 * 
 	 * @author gewx
 	 * @return void
 	 **/
 	public void release() {
-		after();
+		if (!AUTOMATIC.get()) {
+			after();
+		}
 	}
 
 	/**
