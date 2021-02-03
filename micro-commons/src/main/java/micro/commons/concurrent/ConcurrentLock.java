@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.exception.ConcurrentException;
-
+ 
 /**
  * 并发处理,基于Redis setNx控制. REMARKS: 针对复合锁,子锁超时时间建议<根锁
  * 
@@ -25,11 +25,6 @@ public final class ConcurrentLock {
 	 * 分布式锁VALUE
 	 **/
 	private static final String VALUE = "TRUE";
-
-	/**
-	 * 分布式锁自动释放标记
-	 **/
-	private static final ThreadLocal<Boolean> AUTOMATIC = ThreadLocal.withInitial(() -> true);
 
 	/**
 	 * 分布式锁Key
@@ -82,18 +77,6 @@ public final class ConcurrentLock {
 	}
 
 	/**
-	 * 设置是否锁自动释放
-	 * 
-	 * @author gewx
-	 * @param automatic true/false
-	 * @return ConcurrentLock对象
-	 **/
-	public ConcurrentLock automatic(Boolean automatic) {
-		AUTOMATIC.set(automatic);
-		return this;
-	}
-
-	/**
 	 * 设置并发异常提示信息
 	 * 
 	 * @author gewx
@@ -125,13 +108,7 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				try {
-					if (AUTOMATIC.get()) {
-						after();
-					}
-				} finally {
-					AUTOMATIC.remove();
-				}
+				after();
 			}
 		}
 	}
@@ -155,13 +132,7 @@ public final class ConcurrentLock {
 			}
 		} finally {
 			if (!(exception instanceof ConcurrentException)) {
-				try {
-					if (AUTOMATIC.get()) {
-						after();
-					}
-				} finally {
-					AUTOMATIC.remove();
-				}
+				after();
 			}
 		}
 	}
@@ -170,12 +141,11 @@ public final class ConcurrentLock {
 	 * 手工释放锁,解决某些锁内资源异步情况下锁冲突问题[注:需要与幂等设计配合]
 	 * 
 	 * @author gewx
+	 * @param lockKey 锁钥
 	 * @return void
 	 **/
-	public void release() {
-		if (!AUTOMATIC.get()) {
-			after();
-		}
+	public void release(String lockKey) {
+		redisTemplate.delete(lockKey);
 	}
 
 	/**
@@ -199,7 +169,8 @@ public final class ConcurrentLock {
 	private void after() {
 		if (MULTIWAY.get().isEmpty()) {
 			try {
-				redisTemplate.delete(KEY.get());
+				String key = KEY.get();
+				redisTemplate.delete(key);
 			} finally {
 				KEY.remove();
 				TIME_OUT.remove();
