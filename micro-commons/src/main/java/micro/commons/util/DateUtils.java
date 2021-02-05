@@ -5,6 +5,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
+import java.util.function.Supplier;
 
 /**
  * 日期工具类 基于Joda-time
@@ -153,5 +154,37 @@ public final class DateUtils {
 	public static Period timeDiffPeriod(DateTime start, DateTime end) {
 		Interval time = new Interval(start, end);
 		return time.toPeriod();
+	}
+
+	/**
+	 * 日期格式化
+	 * 
+	 * @author gewx
+	 * @param date   日期
+	 * @param format 格式化函数
+	 * @return 格式化字符串
+	 **/
+	public static String format(Date date, Supplier<DateTimeFormatter> format) {
+		if (date == null) {
+			return null;
+		} else {
+			return new DateTime(date).toString(format.get());
+		}
+	}
+
+	/**
+	 * 日期格式化
+	 * 
+	 * @author gewx
+	 * @param date   日期
+	 * @param format 格式化函数
+	 * @return 格式化字符串
+	 **/
+	public static String format(DateTime date, Supplier<DateTimeFormatter> format) {
+		if (date == null) {
+			return null;
+		} else {
+			return date.toString(format.get());
+		}
 	}
 }
