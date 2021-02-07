@@ -110,6 +110,6 @@ public final class ConcurrentMergerUtils {
 	 * @return 归并结果
 	 **/
 	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth) {
-		return calculate(execute, result, taskDepth, TimeUnit.MILLISECONDS, 5);
+		return calculate(execute, result, taskDepth, TimeUnit.MILLISECONDS, 15);
 	}
 }
