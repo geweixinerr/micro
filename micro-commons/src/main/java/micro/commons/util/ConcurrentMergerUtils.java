@@ -45,9 +45,12 @@ public final class ConcurrentMergerUtils {
 	 * @param execute   执行器
 	 * @param result    待计算数据.只支持List集合
 	 * @param taskDepth 任务深度(即一个任务分片分配多少数据)
+	 * @param time      间隙停顿时间单位
+	 * @param unit      间隙停顿时间
 	 * @return 归并结果
 	 **/
-	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth) {
+	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth, TimeUnit time,
+			int unit) {
 		if (CollectionUtils.isEmpty(result)) {
 			return Collections.emptyList();
 		}
@@ -89,11 +92,24 @@ public final class ConcurrentMergerUtils {
 				throw new ConcurrentMergerException("归并计算异常, ex: " + ex.toString());
 			}
 			try {
-				TimeUnit.MILLISECONDS.sleep(100);
+				time.sleep(unit);
 			} catch (InterruptedException e) {
 				throw new ConcurrentMergerException("归并计算异常, ex: " + e.getMessage());
 			}
 		}
 		return mergerList;
+	}
+
+	/**
+	 * 归并计算
+	 * 
+	 * @author gewx
+	 * @param execute   执行器
+	 * @param result    待计算数据.只支持List集合
+	 * @param taskDepth 任务深度(即一个任务分片分配多少数据)
+	 * @return 归并结果
+	 **/
+	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth) {
+		return calculate(execute, result, taskDepth, TimeUnit.MILLISECONDS, 5);
 	}
 }
