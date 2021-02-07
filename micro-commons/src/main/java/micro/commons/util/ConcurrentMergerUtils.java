@@ -1,6 +1,7 @@
 package micro.commons.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFuture;
 
@@ -41,12 +43,16 @@ public final class ConcurrentMergerUtils {
 	 * 
 	 * @author gewx
 	 * @param execute   执行器
-	 * @param params    待计算数据.只支持List集合
+	 * @param result    待计算数据.只支持List集合
 	 * @param taskDepth 任务深度(即一个任务分片分配多少数据)
 	 * @return 归并结果
 	 **/
-	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> params, int taskDepth) {
-		int allDepth = params.size();
+	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth) {
+		if (CollectionUtils.isEmpty(result)) {
+			return Collections.emptyList();
+		}
+
+		int allDepth = result.size();
 		int allTask = allDepth / taskDepth;
 		if (allDepth % taskDepth != 0) {
 			allTask = allTask + 1;
@@ -60,7 +66,7 @@ public final class ConcurrentMergerUtils {
 		IntStream.range(0, allTask).forEach(val -> {
 			ListenableFuture<R> future = (ListenableFuture<R>) POOLTASKEXECUTOR.submitListenable(() -> {
 				int next = (taskDepth + (taskDepth * val));
-				List<T> subList = params.subList(taskDepth * val, next > params.size() ? params.size() : next);
+				List<T> subList = result.subList(taskDepth * val, next > result.size() ? result.size() : next);
 				return execute.apply(subList);
 			});
 
@@ -69,12 +75,12 @@ public final class ConcurrentMergerUtils {
 				try {
 					mergerList.add(future.get());
 				} catch (Exception e) {
-					state.set(false);
 					ex.append(e.getMessage());
+					state.set(false);
 				}
 			}, thx -> {
-				state.set(false);
 				ex.append(thx.getMessage());
+				state.set(false);
 			});
 		});
 
