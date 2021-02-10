@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -45,12 +44,9 @@ public final class ConcurrentMergerUtils {
 	 * @param execute   执行器
 	 * @param result    待计算数据.只支持List集合
 	 * @param taskDepth 任务深度(即一个任务分片分配多少数据)
-	 * @param unit      间隙停顿时间单位
-	 * @param time      间隙停顿时间
 	 * @return 归并结果
 	 **/
-	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth, TimeUnit unit,
-			int time) {
+	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth) {
 		if (CollectionUtils.isEmpty(result)) {
 			return Collections.emptyList();
 		}
@@ -87,29 +83,14 @@ public final class ConcurrentMergerUtils {
 			});
 		});
 
-		while (count.intValue() != 0) {
+		while (true) {
+			if (count.intValue() == 0) {
+				break;
+			}
 			if (!state.get()) {
 				throw new ConcurrentMergerException("归并计算异常, ex: " + ex.toString());
 			}
-			try {
-				unit.sleep(time);
-			} catch (InterruptedException e) {
-				throw new ConcurrentMergerException("归并计算异常, ex: " + e.getMessage());
-			}
 		}
 		return mergerList;
-	}
-
-	/**
-	 * 归并计算
-	 * 
-	 * @author gewx
-	 * @param execute   执行器
-	 * @param result    待计算数据.只支持List集合
-	 * @param taskDepth 任务深度(即一个任务分片分配多少数据)
-	 * @return 归并结果
-	 **/
-	public static <T, R> List<R> calculate(Function<List<T>, R> execute, List<T> result, int taskDepth) {
-		return calculate(execute, result, taskDepth, TimeUnit.MILLISECONDS, 15);
 	}
 }
