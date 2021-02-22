@@ -42,12 +42,12 @@ public final class GlobalThreadPoolTaskExecutor {
 		return INSTANCE;
 	}
 
-	public void execute(AbstractTaskBean taskBean) {
-		POOLTASKEXECUTOR.execute(taskBean);
+	public void execute(TaskBean taskBean) {
+		POOLTASKEXECUTOR.execute(taskBean.getTask());
 	}
 
-	public void execute(AbstractTaskBeanDelayed taskBean) {
-		POOLTASKEXECUTOR.execute(taskBean);
+	public void execute(TaskBeanDelayed taskBean) {
+		POOLTASKEXECUTOR.execute(taskBean.getTask());
 	}
 
 	public void execute(Runnable runTask) {

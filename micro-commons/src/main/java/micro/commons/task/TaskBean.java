@@ -5,7 +5,7 @@ package micro.commons.task;
  * 
  * @author gewx
  **/
-public abstract class AbstractTaskBean implements Runnable {
+public final class TaskBean {
 
 	/**
 	 * 任务Id
