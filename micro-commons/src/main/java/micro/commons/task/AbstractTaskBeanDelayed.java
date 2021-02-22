@@ -21,14 +21,24 @@ public abstract class AbstractTaskBeanDelayed implements Delayed, Runnable {
 	private String taskName;
 
 	/**
-	 * 任务
+	 * 重试-最大次数
 	 **/
-	private Runnable task;
+	private int retryMax;
+
+	/**
+	 * 重试当前次数
+	 **/
+	private int retryNum;
 
 	/**
 	 * 延迟时间
 	 **/
 	private long expire;
+
+	/**
+	 * 任务
+	 **/
+	private Runnable task;
 
 	/**
 	 * 优先队列里面优先级规则 TimeUnit .MILLISECONDS 获取单位 为毫秒的时间戳
@@ -62,19 +72,35 @@ public abstract class AbstractTaskBeanDelayed implements Delayed, Runnable {
 		this.taskName = taskName;
 	}
 
-	public Runnable getTask() {
-		return task;
-	}
-
-	public void setTask(Runnable task) {
-		this.task = task;
-	}
-
 	public long getExpire() {
 		return expire;
 	}
 
 	public void setExpire(long expire) {
 		this.expire = expire;
+	}
+
+	public int getRetryMax() {
+		return retryMax;
+	}
+
+	public void setRetryMax(int retryMax) {
+		this.retryMax = retryMax;
+	}
+
+	public int getRetryNum() {
+		return retryNum;
+	}
+
+	public void setRetryNum(int retryNum) {
+		this.retryNum = retryNum;
+	}
+
+	public Runnable getTask() {
+		return task;
+	}
+
+	public void setTask(Runnable task) {
+		this.task = task;
 	}
 }

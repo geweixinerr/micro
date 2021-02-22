@@ -1,7 +1,7 @@
 package micro.commons.task;
 
 /**
- * 任务Bean
+ * 任务bean
  * 
  * @author gewx
  **/
