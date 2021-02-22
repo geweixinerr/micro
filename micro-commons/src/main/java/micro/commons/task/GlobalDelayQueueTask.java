@@ -29,7 +29,7 @@ public final class GlobalDelayQueueTask {
 		ScheduledExecutorTask task = new ScheduledExecutorTask();
 		task.setDelay(0);
 		task.setFixedRate(false);
-		task.setPeriod(1000 * 15);
+		task.setPeriod(100);
 		task.setRunnable(new Runnable() {
 			@Override
 			public void run() {
