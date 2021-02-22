@@ -1,9 +1,9 @@
 package micro.commons.task;
 
-import java.util.concurrent.DelayQueue;
-
 import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.scheduling.concurrent.ScheduledExecutorTask;
+
+import java.util.concurrent.DelayQueue;
 
 /**
  * 全局延迟任务异步处理
@@ -29,7 +29,7 @@ public final class GlobalDelayQueueTask {
 		ScheduledExecutorTask task = new ScheduledExecutorTask();
 		task.setDelay(0);
 		task.setFixedRate(false);
-		task.setPeriod(1000 * 15);
+		task.setPeriod(100);
 		task.setRunnable(new Runnable() {
 			@Override
 			public void run() {
@@ -37,16 +37,18 @@ public final class GlobalDelayQueueTask {
 				do {
 					taskBean = DELAY_QUEUE.poll();
 					if (taskBean != null) {
-						TASK_POOL.execute(taskBean.getTask());
+						if (taskBean.getRetryNum() < taskBean.getRetryMax()) {
+							taskBean.setRetryNum(taskBean.getRetryNum() + 1);
+							TASK_POOL.execute(taskBean.getTask());
+						}
 					}
 				} while (taskBean != null);
 			}
 		});
 
 		FACTORY.setScheduledExecutorTasks(task);
-		// 调度遇到异常后,调度计划继续执行
 		FACTORY.setContinueScheduledExecutionAfterException(true);
-		FACTORY.setThreadNamePrefix("YOGA_TASK_DELAY");
+		FACTORY.setThreadNamePrefix("PPMCLOUD_TASK_DELAY");
 		FACTORY.setPoolSize(CORE_SIZE);
 		FACTORY.initialize();
 	}
