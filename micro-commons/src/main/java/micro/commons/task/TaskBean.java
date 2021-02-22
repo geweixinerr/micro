@@ -1,5 +1,8 @@
 package micro.commons.task;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * 任务Bean
  * 
@@ -44,5 +47,33 @@ public final class TaskBean {
 
 	public void setTask(Runnable task) {
 		this.task = task;
+	}
+	
+	@Override
+	public int hashCode() {
+		HashCodeBuilder builder = new HashCodeBuilder();
+		builder.append(this.taskId);
+		return builder.toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object otherObject) {
+		if (otherObject == null) {
+			return false;
+		}
+
+		if (this == otherObject) {
+			return true;
+		}
+
+		if (!(otherObject instanceof TaskBean)) {
+			return false;
+		}
+
+		TaskBean taskObject = (TaskBean) otherObject;
+
+		EqualsBuilder builder = new EqualsBuilder();
+		builder.append(taskObject.taskId, this.taskId);
+		return builder.isEquals();
 	}
 }
