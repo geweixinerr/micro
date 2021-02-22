@@ -21,7 +21,7 @@ public final class GlobalDelayQueueTask {
 
 	private static final GlobalThreadPoolTaskExecutor TASK_POOL = GlobalThreadPoolTaskExecutor.getInstance();
 
-	private static final DelayQueue<AbstractTaskBeanDelayed> DELAY_QUEUE = new DelayQueue<>();
+	private static final DelayQueue<TaskBeanDelayed> DELAY_QUEUE = new DelayQueue<>();
 
 	private static final ScheduledExecutorFactoryBean FACTORY = new ScheduledExecutorFactoryBean();
 
@@ -33,11 +33,11 @@ public final class GlobalDelayQueueTask {
 		task.setRunnable(new Runnable() {
 			@Override
 			public void run() {
-				AbstractTaskBeanDelayed taskBean = null;
+				TaskBeanDelayed taskBean = null;
 				do {
 					taskBean = DELAY_QUEUE.poll();
 					if (taskBean != null) {
-						TASK_POOL.execute(taskBean);
+						TASK_POOL.execute(taskBean.getTask());
 					}
 				} while (taskBean != null);
 			}
@@ -65,7 +65,7 @@ public final class GlobalDelayQueueTask {
 	 * 
 	 * @author gewx
 	 **/
-	public void compareAndSet(AbstractTaskBeanDelayed taskBean) {
+	public void compareAndSet(TaskBeanDelayed taskBean) {
 		if (DELAY_QUEUE.contains(taskBean)) {
 			DELAY_QUEUE.remove(taskBean);
 			DELAY_QUEUE.add(taskBean);
