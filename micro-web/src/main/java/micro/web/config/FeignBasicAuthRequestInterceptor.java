@@ -3,10 +3,9 @@ package micro.web.config;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.annotation.concurrent.ThreadSafe;
-
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import micro.commons.annotation.ThreadSafe;
 import micro.commons.enums.ThreadContextEnum;
 
 /**
