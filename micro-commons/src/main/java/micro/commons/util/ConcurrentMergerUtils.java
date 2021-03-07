@@ -69,10 +69,10 @@ public final class ConcurrentMergerUtils {
 				return execute.apply(subList);
 			});
 
-			future.addCallback(call -> {
+			future.addCallback(r -> {
 				count.decrementAndGet();
 				try {
-					mergerList.add(future.get());
+					mergerList.add(r);
 				} catch (Exception e) {
 					ex.append(e.getMessage());
 					state.set(false);
