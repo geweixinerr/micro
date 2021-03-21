@@ -93,4 +93,20 @@ public final class ConcurrentMergerUtils {
 		}
 		return mergerList;
 	}
+
+	/**
+	 * 计算归并结果集
+	 * 
+	 * @author gewx
+	 * @param result 归并结果集
+	 * @param func   结果集处理函数
+	 * @return 归并结果集
+	 **/
+	public static <T, R> List<R> getResult(List<T> result, Function<T, R> func) {
+		List<R> list = new ArrayList<>(64);
+		result.forEach(val -> {
+			list.add(func.apply(val));
+		});
+		return list;
+	}
 }
