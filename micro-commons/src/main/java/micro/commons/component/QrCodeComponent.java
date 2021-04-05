@@ -106,20 +106,7 @@ public final class QrCodeComponent {
 	 * @return 二维码字节数组
 	 **/
 	public byte[] encode(String content, ImageFormat format) throws IOException, WriterException {
-		return encode(content, false, format);
-	}
-
-	/**
-	 * 二维码编码并返回字节数组
-	 * 
-	 * @author gewx
-	 * @param content  内容
-	 * @param compress 是否压缩
-	 * @param format   格式化类型
-	 * @return 二维码字节数组
-	 **/
-	public byte[] encode(String content, boolean compress, ImageFormat format) throws IOException, WriterException {
-		return encode(content, null, compress, format);
+		return encode(content, null, false, format);
 	}
 
 	/**
@@ -150,22 +137,7 @@ public final class QrCodeComponent {
 	 * @return void
 	 **/
 	public void encode(String content, File dest, ImageFormat format) throws IOException, WriterException {
-		encode(content, false, dest, format);
-	}
-
-	/**
-	 * 二维码编码并输出到磁盘
-	 * 
-	 * @author gewx
-	 * @param content  内容
-	 * @param compress 是否压缩
-	 * @param dest     二维码输出地址
-	 * @param format   格式化类型
-	 * @return void
-	 **/
-	public void encode(String content, boolean compress, File dest, ImageFormat format)
-			throws IOException, WriterException {
-		encode(content, null, compress, dest, format);
+		encode(content, null, false, dest, format);
 	}
 
 	/**
