@@ -5,6 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import micro.commons.annotation.ThreadSafe;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -48,5 +54,25 @@ public final class HttpRequestUtils {
 				return request.getRemoteAddr();
 			}
 		}
+	}
+	
+	/**
+	 * 获取header请求头列表
+	 * 
+	 * @author gewx
+	 * @param request 请求对象
+	 * @return 请求头
+	 **/
+	public static Map<String, Object> getHeaders(HttpServletRequest request) {
+		List<String> headersList = new ArrayList<>(32);
+		Enumeration<String> en = request.getHeaderNames();
+		while (en.hasMoreElements()) {
+			headersList.add(en.nextElement());
+		}
+		Map<String, Object> headersMap = new HashMap<>(32);
+		headersList.forEach(val -> {
+			headersMap.put(val, request.getHeader(val));
+		});
+		return headersMap;
 	}
 }
