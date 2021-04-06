@@ -1,5 +1,11 @@
 package micro.commons.util;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
+import org.apache.commons.lang3.StringUtils;
+
+import micro.commons.annotation.ThreadSafe;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,17 +13,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
-
-import micro.commons.annotation.ThreadSafe;
-import net.sourceforge.pinyin4j.PinyinHelper;
-
 /**
  * 拼音转换工具类
  * 
  * @author gewx
  **/
-@ThreadSafe 
+@ThreadSafe
 public final class PinYin4jUtils {
 
 	public static final String SPLIT_SYMBOL = " / ";
@@ -43,7 +44,11 @@ public final class PinYin4jUtils {
 		for (int i = 0; i < charArray.length; i++) {
 			String tempVal = Character.toString(charArray[i]);
 			if (PATTERN_CN_ZH.matcher(tempVal).matches()) {
-				String val = PinyinHelper.toHanyuPinyinStringArray(charArray[i])[0];
+				String[] pinyingArray = PinyinHelper.toHanyuPinyinStringArray(charArray[i]);
+				if (pinyingArray == null) {
+					continue;
+				}
+				String val = pinyingArray[0];
 				val = PATTERN_NUMBER.matcher(val).replaceAll(StringUtils.EMPTY);
 				dataList.add(val);
 			} else {
