@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -109,6 +110,23 @@ public final class FeignRpcUtils {
 		return JSONUtils.NON_NULL.toJavaObject(JSONUtils.NON_NULL.toJSONString(rpcResult.getData()), typeReference);
 	}
 
+	/**
+	 * 获取RPC结果集
+	 * 
+	 * @author gewx
+	 * @param execute  操作体
+	 * @param function 响应转换类型
+	 * @return 解析后的数据
+	 **/
+	public static <R> R handleRpcResult(Supplier<FeignRpcUtils.Result> execute,
+			Function<FeignRpcUtils.Result, R> function) {
+		FeignRpcUtils.Result rpcResult = execute.get();
+		if (!rpcResult.isAllSuccess()) {
+			throw new BusinessRuntimeException("RPC调用失败或未查询到相关信息~");
+		}
+		return function.apply(rpcResult);
+	}
+	
 	/**
 	 * 设置token
 	 * 
