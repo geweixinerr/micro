@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import micro.commons.annotation.ThreadSafe;
 import micro.commons.enums.ThreadContextEnum;
 import micro.commons.exception.BusinessRuntimeException;
-import micro.commons.log.MicroLogger;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,20 +30,15 @@ import org.apache.commons.lang3.StringUtils;
 public final class FeignRpcUtils {
 
 	/**
-	 * 日志组件
-	 */
-	private static final MicroLogger LOGGER = new MicroLogger(FeignRpcUtils.class);
-
-	/**
 	 * token
 	 **/
 	private static final String TOKEN = "token";
 
 	/**
 	 * SUCCESS
-	 * **/
+	 **/
 	private static final String SUCCESS = "0000";
-	
+
 	/**
 	 * 响应消息体枚举
 	 **/
@@ -77,15 +73,15 @@ public final class FeignRpcUtils {
 	 * 解析响应数据
 	 *
 	 * @author gewx
-	 * @param responseMap 响应结果集
+	 * @param respMap 响应结果集
 	 * @return 解析后的数据
 	 **/
 	@SuppressWarnings("unchecked")
-	public static Result getResult(Map<String, Object> responseMap) {
-		Boolean success = Boolean.valueOf(getString(responseMap.get(Response.SUCCESS.getCode())));
-		String code = getString(responseMap.get(Response.RESP_CODE.getCode()));
-		String msg = getString(responseMap.get(Response.RESP_MSG.getCode()));
-		Object data = responseMap.get(Response.RESP_DATA.getCode());
+	public static Result getResult(Map<String, Object> respMap) {
+		Boolean success = Boolean.valueOf(getString(respMap.get(Response.SUCCESS.getCode())));
+		String code = getString(respMap.get(Response.RESP_CODE.getCode()));
+		String msg = getString(respMap.get(Response.RESP_MSG.getCode()));
+		Object data = respMap.get(Response.RESP_DATA.getCode());
 		StringBuilder token = new StringBuilder();
 		Object headers = ThreadContextEnum.HEADER.removeAndGetVal();
 		if (headers instanceof Map) {
@@ -100,46 +96,34 @@ public final class FeignRpcUtils {
 	/**
 	 * 获取RPC结果集
 	 * 
-	 * @author liangd
-	 * @param methodName    方法名
-	 * @param map           RPC响应结果
-	 * @param typeReference 转换
-	 * @return 响应结果集
+	 * @author gewx
+	 * @param execute       操作体
+	 * @param typeReference 响应转换类型
+	 * @return 解析后的数据
 	 **/
-	public static <T> T handleRpcResult(String methodName, Map<String, Object> map, TypeReference<T> typeReference) {
-		LOGGER.enter(methodName, StringUtils.EMPTY);
-		FeignRpcUtils.Result rpcResult = FeignRpcUtils.getResult(map);
-		LOGGER.info(methodName, "RPC调用响应, rpcResult: " + rpcResult);
-		if (rpcResult.isAllSuccess()) {
-			Object data = rpcResult.getData();
-			if (null != data) {
-				String rpcResultDataJson = JSONUtils.NON_NULL.toJSONString(data);
-				T t = JSONUtils.NON_NULL.toJavaObject(rpcResultDataJson, typeReference);
-				LOGGER.info(methodName, "RPC调用响应, rpcData: " + t);
-				LOGGER.exit(methodName, StringUtils.EMPTY);
-				return t;
-			}
-			return null;
-		} else {
+	public static <T, R> T handleRpcResult(Supplier<FeignRpcUtils.Result> execute, TypeReference<T> typeReference) {
+		FeignRpcUtils.Result rpcResult = execute.get();
+		if (!rpcResult.isAllSuccess()) {
 			throw new BusinessRuntimeException("RPC调用失败或未查询到相关信息~");
 		}
+		return JSONUtils.NON_NULL.toJavaObject(JSONUtils.NON_NULL.toJSONString(rpcResult.getData()), typeReference);
 	}
-	
+
 	/**
 	 * 设置token
 	 * 
-	 *  @author gewx
-	 *  @param token 认证token
-	 *  @return void
-	 * **/
+	 * @author gewx
+	 * @param token 认证token
+	 * @return void
+	 **/
 	public static void setToken(String token) {
 		Collection<String> collections = new ArrayList<>();
 		collections.add(token);
 		Map<String, Collection<String>> headers = new HashMap<>();
 		headers.put(TOKEN, collections);
-		ThreadContextEnum.HEADER.setVal(headers); 
+		ThreadContextEnum.HEADER.setVal(headers);
 	}
-	
+
 	/**
 	 * RPC响应结果集对象
 	 **/
