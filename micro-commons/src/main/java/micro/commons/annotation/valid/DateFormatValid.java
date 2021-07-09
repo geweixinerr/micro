@@ -9,7 +9,9 @@ import micro.commons.annotation.DateFormat;
 import micro.commons.util.DateUtils;
 
 /**
- * @author geweixinerr 注解验证器
+ * 注解验证器
+ * 
+ * @author gewx
  * 
  **/
 public class DateFormatValid implements ConstraintValidator<DateFormat, String> {

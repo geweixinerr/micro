@@ -15,7 +15,7 @@ import micro.commons.annotation.valid.PatternValid;
  * 
  * @author gewx
  **/
-@Target({ ElementType.FIELD })
+@Target({ ElementType.FIELD,ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = { PatternValid.class })
 public @interface Pattern {

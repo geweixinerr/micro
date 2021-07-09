@@ -8,21 +8,21 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import micro.commons.annotation.valid.DateFormatValid;
+import micro.commons.annotation.valid.EnumValid;
 
 /**
- * 日期校验注解
+ * 枚举校验注解
  * 
  * @author gewx
  **/
-@Target({ ElementType.FIELD,ElementType.PARAMETER })
+@Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { DateFormatValid.class })
-public @interface DateFormat {
+@Constraint(validatedBy = { EnumValid.class })
+public @interface Enums {
 
-	String value();
+	String[] enums();
 
-	String message() default "日期格式不匹配~";
+	String message() default "枚举不匹配~";
 
 	boolean required() default false;
 
